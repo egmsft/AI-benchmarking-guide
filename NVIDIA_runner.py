@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import torch
+import platform 
 
 from Benchmarks.NVIDIA import GEMMCublasLt as gemm
 from Benchmarks.NVIDIA import HBMBandwidth as HBM
@@ -34,8 +35,10 @@ def get_system_specs():
     file.write("CUDA version     : "+cuda_version+"\n")
 
     if output[0].strip() != "NVIDIA Graphics Device" or "GB200" in output[0]:
-        results = subprocess.run("lsb_release -a | grep Release", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        ubuntu = results.stdout.decode('utf-8').strip().split("\t")[1]
+        results = subprocess.run("grep VERSION_ID /etc/os-release | cut -d\'=\' -f2 | tr -d \'\"\'", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        #results = subprocess.run("lsb_release -a | grep Release", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        platform_info = platform.platform()
+        ubuntu = results.stdout.decode('utf-8').strip()
         file.write("ubuntu version   : "+ubuntu+"\n")
         file.write("pytorch version  : {torch.__version__}\n")
 
