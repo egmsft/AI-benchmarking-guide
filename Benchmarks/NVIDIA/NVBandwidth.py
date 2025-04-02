@@ -36,7 +36,7 @@ class NVBandwidth:
         os.chdir(build_path)
         results = subprocess.run(['sed', '-i', '2i\set(CMAKE_CUDA_COMPILER /usr/local/cuda/bin/nvcc)', 'CMakeLists.txt'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        if os.path.exists("/.dockerenv"):
+        if os.path.exists("/.dockerenv") or os.getenv('NVIDIA_PRODUCT_NAME'):
             results = subprocess.run('apt update && ./debian_install.sh', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         else:
             results = subprocess.run('sudo apt update && sudo ./debian_install.sh', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
