@@ -9,7 +9,6 @@ from nemo.collections.llm.recipes.precision.mixed_precision import (
     fp16_mixed,
     fp16_with_fp8_mixed
 )
-from nemo.lightning.pytorch.callbacks.callback import Callback
 
 def load_config():
     with open("config.json") as f:

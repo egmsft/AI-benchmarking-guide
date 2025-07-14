@@ -143,9 +143,9 @@
         }
     },
     
-    "LLaMA3Pretraining": {
+    "LLAMA3Pretraining": {
         "mount_path": ".",
-        "training_script": "Benchmarks/NVIDIA/ExecuteLLaMA3Pretrain.py",
+        "training_script": "Benchmarks/NVIDIA/ExecuteLLAMA3Pretrain.py",
         "docker_image": "nvcr.io/nvidia/nemo:25.04",
         "micro_batch_size": 1,
         "precision": "fp8",
