@@ -13,7 +13,7 @@ from nemo.lightning.pytorch.callbacks.callback import Callback
 
 def load_config():
     with open("config.json") as f:
-        return json.load(f)["LLAMA3Pretraining"]
+        return json.load(f)["LLaMA3Pretraining"]
 
 
 def configure_recipe(cfg, nodes=1, gpus_per_node=4):
@@ -49,7 +49,6 @@ def configure_recipe(cfg, nodes=1, gpus_per_node=4):
     recipe.trainer.devices = gpus_per_node
 
     # just for testing purposes to see if the plot generates properly
-    recipe.trainer.max_time = "0:04:00:00" # stop after 4 hours
     recipe.trainer.max_steps = 3
 
     return recipe

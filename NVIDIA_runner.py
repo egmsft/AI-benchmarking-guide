@@ -12,7 +12,7 @@ from Benchmarks.NVIDIA import FIO
 from Benchmarks.NVIDIA import CPUStream as CPU
 from Benchmarks.NVIDIA import Multichase as Multichase
 from Benchmarks.NVIDIA import LLMBenchmark as llmb
-from Benchmarks.NVIDIA import LLaMA3Pretraining as llama3pre  
+from Benchmarks.NVIDIA import LLAMA3Pretraining as llama3pre  
 from Infra import tools
 
 host_name = tools.get_hostname()
@@ -90,8 +90,8 @@ def run_LLMBenchmark():
     test.download_models()
     test.run_benchmark()
 
-def run_LLaMA3Pretrain():
-    test = llama3pre.LLaMA3Pretraining("config.json", host_name)
+def run_LLAMA3Pretrain():
+    test = llama3pre.LLAMA3Pretraining("config.json", host_name)
     test.run()
 
 sku_name = get_system_specs()
@@ -147,7 +147,7 @@ if ("llm" in arguments):
 
 if ("llama_pretrain" in arguments):
     match = True
-    run_LLaMA3Pretrain()
+    run_LLAMA3Pretrain()
     os.chdir(current)
     
 if ("all" in arguments):
