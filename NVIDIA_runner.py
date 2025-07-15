@@ -12,7 +12,7 @@ from Benchmarks.NVIDIA import FIO
 from Benchmarks.NVIDIA import CPUStream as CPU
 from Benchmarks.NVIDIA import Multichase as Multichase
 from Benchmarks.NVIDIA import LLMBenchmark as llmb
-from Benchmarks.NVIDIA import LLAMA3Pretraining as llama3pre  
+from Benchmarks.NVIDIA import LLAMA3Run as llama3pre  
 from Infra import tools
 
 host_name = tools.get_hostname()
