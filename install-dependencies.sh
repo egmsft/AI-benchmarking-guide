@@ -86,7 +86,7 @@ elif [[ "$platform" == "NVIDIA" ]]; then
     gpu_output=$(nvidia-smi --query-gpu=gpu_name --format=csv,noheader)
     if echo "$gpu_output" | grep -q "GB200"; then
         # only install GB200 requirements
-        $pip install torch prettytable cmake huggingface_hub
+        $pip install torch prettytable cmake huggingface_hub numpy matplotlib
     else
         $pip install -r requirements_main.txt
         $pip install $(cat requirements_flashattn.txt) --no-build-isolation

@@ -141,5 +141,19 @@
                 "num_requests": [1000]
             }
         }
+    },
+    
+    "LLAMA3Pretraining": {
+        "mount_path": ".",
+        "training_script": "Benchmarks/NVIDIA/LLAMA3Recipe.py",
+        "docker_image": "nvcr.io/nvidia/nemo:25.04",
+        "micro_batch_size": 1,
+        "precision": "fp8",
+        "parallelism": {
+            "tp": 1,
+            "pp": 1,
+            "vp": null,
+            "cp": 2
+        }
     }
 }
