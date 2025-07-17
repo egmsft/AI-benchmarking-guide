@@ -46,4 +46,3 @@ def export_markdown(title, description, table = None):
         file.write(description + "\n")
         file.write(table)
         file.write("\n\n")
-    print("results saved to " + filename)
