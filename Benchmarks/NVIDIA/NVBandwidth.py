@@ -62,5 +62,10 @@ class NVBandwidth:
                 t.add_row(result[i][j])
             print(labels[i])
             print(t)
-            tools.export_markdown("NV Bandwidth", labels[i], t)
+
+            if i == 0:
+                tools.export_markdown("NV Bandwidth", labels[i], t)
+            else:
+                tools.export_markdown(None, labels[i], t)
+                
             
