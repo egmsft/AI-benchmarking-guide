@@ -39,7 +39,7 @@ class NVBandwidth:
         self.format_output(item)
         os.chdir(current)
         
-    def format_output(self, output):
+    def format_output(self, text):
         tables, current = [], []
         for line in text.splitlines():
             if not line.strip():
