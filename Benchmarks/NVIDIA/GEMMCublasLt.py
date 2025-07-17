@@ -4,7 +4,6 @@ import shlex
 import subprocess
 import datetime
 import time
-import csv
 from Infra import tools
 from prettytable import PrettyTable
 
@@ -139,13 +138,9 @@ class GEMMCublastLt:
             buffer.append(log)
             tools.write_log(tools.check_error(results))
         table1 = PrettyTable()
-
-        with open('../Outputs/GEMMCublasLt_Performance_' + self.machine_name + '_' + self.datatype+'.csv', 'w') as csvFile:
-            writer = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(["M", "N", "K", "Batch", "Time(us)", "TFLOPS"])
-            table1.field_names = ["M", "N", "K", "Batch Size", "Time(us)", "TFLOPS"]
-            for item in buffer:
-                writer.writerow(item)
-                table1.add_row(item)
+        table1.field_names = ["M", "N", "K", "Batch Size", "Time(us)", "TFLOPS"]
+        for item in buffer:
+            table1.add_row(item)
         print(table1)
+        tools.export_markdown("GEMM CuBLASLt", "The results shown below are with random initialization (best representation of real-life workloads) " + self.datatype +  ", and " + self.w + " warmup iterations.", table1)
         os.chdir(current)
