@@ -125,6 +125,7 @@ class LLMBenchmark:
                     self.extract_benchmark_info(results_path)
                     tools.write_log(tools.check_error(be2))
                 print(self.table)
+                tools.export_markdown(model_name, "Performance results with FP8 quantization, 1000 requests.", self.table)
 
     def extract_benchmark_info(self, file_path):
         keywords = [
