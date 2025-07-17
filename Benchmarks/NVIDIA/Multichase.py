@@ -38,6 +38,4 @@ class Multichase:
         results = subprocess.run("cd Benchmarks/NVIDIA && sudo chmod 777 run_multichase.sh && ./run_multichase.sh",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         tools.write_log(tools.check_error(results))
         print(results.stdout.decode("utf-8"))
-
-        file = open("Outputs/Multichase_" + self.machine_name + ".txt", "w")
-        file.write(results.stdout.decode("utf-8"))
+        tools.export_markdown("Multichase", results.stdout.decode("utf-8"), None)
