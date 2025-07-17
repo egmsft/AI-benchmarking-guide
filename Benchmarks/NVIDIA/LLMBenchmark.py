@@ -30,7 +30,7 @@ class LLMBenchmark:
         if not os.path.exists("/.dockerenv"):
             # Install required packages
             print("No Docker container detected. Installing Required Packages")
-            i2 = subprocess.run("pip install --extra-index-url https://pypi.nvidia.com/ tensorrt-llm==0.18.2", shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            i2 = subprocess.run("pip install tensorrt-llm", shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             tools.write_log(tools.check_error(i2))
             i2 = subprocess.run("sudo apt update && sudo apt-get -y install libopenmpi-dev", shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             tools.write_log(tools.check_error(i2))
