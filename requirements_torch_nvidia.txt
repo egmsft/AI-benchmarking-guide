@@ -1,10 +1,9 @@
 packaging==24.2
-psutil===6.1.0
-setuptools==75.8.1
+psutil===7.0.0
+setuptools==79.0.1
 wheel
-torch==2.5.0
-torchvision==0.20.1
-torchaudio==2.5.1
-click
+torch==2.7.0
+torchvision==0.22.0
+click==8.2.1
 pydantic
 datasets
