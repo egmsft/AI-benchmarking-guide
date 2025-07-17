@@ -58,7 +58,7 @@ class NVBandwidth:
         for i in range(len(result)):
             result[i][0].insert(0, " ")
             t = PrettyTable(result[i][0])
-            for j in range(1, len(result[i]):
+            for j in range(1, len(result[i])):
                 t.add_row(result[i][j])
             print(labels[i])
             print(t)
