@@ -47,7 +47,7 @@ class NVBandwidth:
                     tables.append(current)
                     current = []
                 continue
-            if 'SUM' in line:
+            if 'memcpy' in line:
                 continue
             row = [x.strip() for x in line.split() if x.strip()]
             current.append([float(x) if x.replace('.', '', 1).isdigit() else x for x in row])
