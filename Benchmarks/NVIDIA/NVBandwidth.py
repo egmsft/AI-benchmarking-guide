@@ -2,6 +2,7 @@ import json
 import subprocess
 import os
 from Infra import tools
+from prettytable import PrettyTable
 
 class NVBandwidth:
     def __init__(self, path:str, machine: str):
@@ -35,6 +36,31 @@ class NVBandwidth:
         os.chdir(current)
 
         item = "\n".join(log[log.find("device_to_host_memcpy_ce"):].strip().splitlines()[:-2])
-        print(item)
-        tools.export_markdown("NV Bandwidth", item, None)
+        self.format_output(item)
         os.chdir(current)
+        
+    def format_output(self, output):
+        tables, current = [], []
+        for line in text.splitlines():
+            if not line.strip():
+                if current:
+                    tables.append(current)
+                    current = []
+                continue
+            if 'SUM' in line:
+                continue
+            row = [x.strip() for x in line.split() if x.strip()]
+            current.append([float(x) if x.replace('.', '', 1).isdigit() else x for x in row])
+        if current:
+            tables.append(current)
+        result = [tables[0], tables[1], tables[4]]
+        labels = ["Device to Host memcpy", "Host to Device memcpy", "Device to Device Bidirectional memcpy Total"]
+        for i in range(len(result)):
+            result[i][0].insert(0, " ")
+            t = PrettyTable(result[i][0])
+            for j in range(1, len(result[i]):
+                t.add_row(result[i][j])
+            print(labels[i])
+            print(t)
+            tools.export_markdown("NV Bandwidth", labels[i], t)
+            
