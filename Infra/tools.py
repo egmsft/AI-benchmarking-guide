@@ -30,16 +30,18 @@ def get_hostname():
     return results.stdout.decode("utf-8").strip()
 
 def prettytable_to_markdown(table):
+    if table is None:
+        return ""
     header = "| " + " | ".join(table.field_names) + " |"
     separator = "| " + " | ".join("---" for _ in table.field_names) + " |"
     rows = ["| " + " | ".join(str(cell) for cell in row) + " |" for row in table.rows]
     return "\n".join([header, separator] + rows) 
 
-def export_markdown(title, description, table):
+def export_markdown(title, description, table = None):
     table = prettytable_to_markdown(table)
     filename = os.getcwd() + "/Outputs/" + get_hostname() + "_summary.md"
     with open(filename, "a") as file:
         file.write("## " + title + "\n\n")
         file.write(description + "\n")
         file.write(table)
-        file.write("\n\n\n")
+        file.write("\n\n")
