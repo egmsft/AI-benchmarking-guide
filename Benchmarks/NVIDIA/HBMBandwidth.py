@@ -133,4 +133,4 @@ class HBMBandwidth:
         table1.add_row(triad)
         table1.add_row(dot)
         print(table1)
-        tools.export_markdown("HBM Bandwidth", "CPU STREAM Results", table1)
+        tools.export_markdown("HBM Bandwidth", "HBM bandwidth Results", table1)
