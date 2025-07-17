@@ -66,13 +66,6 @@
         }
     },
 
-    "NVBandwidth": {
-        "inputs": {
-            "num_runs": 1,
-            "interval": 5
-        }
-    },
-
     "TransferBench": {
         "inputs": {
             "num_runs": 1,
