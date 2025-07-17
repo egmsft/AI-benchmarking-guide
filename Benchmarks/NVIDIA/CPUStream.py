@@ -128,12 +128,3 @@ class CPUStream:
         table1.add_row(dot)
         print(table1)
         tools.export_markdown("CPU STREAM", "CPU STREAM Results", table1)
-
-        with open('../../Outputs/CPUStream_Performance_results_' + self.machine_name +'.csv', 'w') as csvFile:
-            writer = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(["Operation","Min (TB/s)", "Max (TB/s)", "Mean (TB/s)"])
-            writer.writerow(copy)
-            writer.writerow(mul)
-            writer.writerow(add)
-            writer.writerow(triad)
-            writer.writerow(dot)
