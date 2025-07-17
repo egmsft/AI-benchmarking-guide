@@ -84,17 +84,5 @@ class NCCLBandwidth:
         for i in range(len(buffer)):
             table1.add_column(runs[i], buffer[i])
         print(table1)
-        self.buffer=buffer
-        self.save()
+        tools.export_markdown("NCCL Bandwidth", "The values (in GB/s) are the bus bandwidth values obtained from the NCCL AllReduce (Ring algorithm) tests in-place operations, varying from 1KB to 8GB of data.", table1)
         os.chdir(current)
-
-
-    def save(self):
-        with open('../Outputs/NCCLBandwidth_' + self.machine_name + '.csv', 'w') as csvFile:
-            writer = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(["Message Size", "Bandwidth (" + self.algo + ")"])
-
-            for i in range(len(self.buffer[0])):
-                row = [self.buffer[0][i], self.buffer[1][i]]
-                writer.writerow(row)
-
