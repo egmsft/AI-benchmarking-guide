@@ -2,6 +2,7 @@ import os
 import datetime
 import subprocess
 pwd = os.getcwd() + "/Outputs/log.txt"
+curr = os.getcwd()
 
 def create_dir(name: str):
     current = os.getcwd()
@@ -39,7 +40,7 @@ def prettytable_to_markdown(table):
 
 def export_markdown(title, description, table = None):
     table = prettytable_to_markdown(table)
-    filename = os.getcwd() + "/Outputs/" + get_hostname() + "_summary.md"
+    filename = curr + "/Outputs/" + get_hostname() + "_summary.md"
     with open(filename, "a") as file:
         file.write("## " + title + "\n\n")
         file.write(description + "\n")
