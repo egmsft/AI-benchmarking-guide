@@ -29,19 +29,16 @@ class LLMBenchmark:
     def install_requirements(self):
         if not os.path.exists("/.dockerenv"):
             # Install required packages
-            print("No Docker container detected. Installing Required Packages")
-            i2 = subprocess.run("pip install tensorrt-llm", shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            print("No Docker container detected. Installing tensorrt-llm")
+            i2 = subprocess.run("pip install tensorrt-llm==0.20.0", shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             tools.write_log(tools.check_error(i2))
             i2 = subprocess.run("sudo apt update && sudo apt-get -y install libopenmpi-dev", shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             tools.write_log(tools.check_error(i2))
             i2 = subprocess.run("pip3 install --no-cache-dir --extra-index-url https://pypi.nvidia.com tensorrt-libs", shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             tools.write_log(tools.check_error(i2))
 
-            os.environ['HF_HOME'] = self.dir_path
+        os.environ['HF_HOME'] = self.dir_path
         
-            # you can manually set this environment variable - just find out where python site-packages are located and find tensorrt_libs and tensorrt_llm
-            os.environ['LD_LIBRARY_PATH'] = self.dir_path + "/venv/lib/python3.10/site-packages/tensorrt_libs/:" + self.dir_path + "/venv/lib/python3.10/site-packages/tensorrt_llm/libs" + os.environ['LD_LIBRARY_PATH']
-
         # Clone TensorRT-LLM repo
         if not os.path.exists(os.path.join(self.dir_path, 'TensorRT-LLM')):
             print("Cloning TensorRT-LLM reopsitory from https://github.com/NVIDIA/TensorRT-LLM.git")
