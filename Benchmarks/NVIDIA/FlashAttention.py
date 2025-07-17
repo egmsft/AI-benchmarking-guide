@@ -24,9 +24,8 @@ class FlashAttention:
         tools.write_log(tools.check_error(results))
         os.chdir(current)
 
-        file = open("Outputs/FlashAttention_" + self.machine_name + ".txt", "w")
         table = PrettyTable(["causal", "headdim", "Flash2 total (TFLOPs)", "Pytorch total (TFLOPs)"])
         for m in re.findall(r"causal=(\w+), headdim=(\d+).*?fwd \+ bwd: ([\d.]+).*?fwd \+ bwd: ([\d.]+)", results.stdout.decode('utf-8'), re.DOTALL):
             table.add_row([m[0], int(m[1]), float(m[2]), float(m[3])])
         print(table)
-        file.write(str(table))
+        tools.export_markdown("Flash Attention 2", "The performance (in TFLOPS), in table below, represents the performance for a batch size of 2, and a sequence length of 8192.", table)
