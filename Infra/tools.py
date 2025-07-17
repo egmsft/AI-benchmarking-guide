@@ -42,7 +42,8 @@ def export_markdown(title, description, table = None):
     table = prettytable_to_markdown(table)
     filename = curr + "/Outputs/" + get_hostname() + "_summary.md"
     with open(filename, "a") as file:
-        file.write("## " + title + "\n\n")
+        if title is not None:
+            file.write("## " + title + "\n\n")
         file.write(description + "\n")
         file.write(table)
         file.write("\n\n")
