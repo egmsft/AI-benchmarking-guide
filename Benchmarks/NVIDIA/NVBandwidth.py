@@ -34,8 +34,7 @@ class NVBandwidth:
         log = results.stdout.decode('utf-8')
         os.chdir(current)
 
-        file = open("Outputs/NVBandwidth_" + self.machine_name + ".txt", "w")
         item = "\n".join(log[log.find("device_to_host_memcpy_ce"):].strip().splitlines()[:-2])
-        file.write(item)
         print(item)
+        tools.export_markdown("NV Bandwidth", item, None)
         os.chdir(current)
