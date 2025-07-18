@@ -69,20 +69,20 @@ To assess how different system components (as tested by the microbenchmarks) aff
 
 # HOW TO RUN THE BENCHMARKS
 
+We highly recommend running the benchmarks inside a virtual env to avoid clashing with other pip dependencies. Start a virtual env and activate it:
+
+```
+python3 -m venv venv && source venv/bin/activate
+```
+
 Installation of benchmark dependencies requires multiple steps.
-A convenience script `install-dependencies.sh` is provided to simplify installation. On GB200, make sure to run this script inside a virtual environment.
+A convenience script `install-dependencies.sh` is provided to simplify installation.
 
 ```bash
 install-dependencies.sh 
 ```
 
 ### NVIDIA
-
-**ND GB200 v6** still runs an externally managed environment, so the benchmarks need to be ran inside a python virtual env. Start a venv with the following commands before running the benchmarks:
-
-```
-python3 -m venv venv && source venv/bin/activate
-```
 
 Usage: `python3 NVIDIA_runner.py [arg]`\
    or: `python3 NVIDIA_runner.py [arg1] [arg2]` ... to run more than one test e.g `python3 NVIDIA_runner.py hbm nccl`\
