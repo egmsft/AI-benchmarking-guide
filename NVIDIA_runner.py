@@ -24,7 +24,7 @@ def get_system_specs():
     if not os.path.exists(current +  "/Outputs/" + host_name + "_summary.md"):
         results = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name,vbios_version,driver_version,memory.total", "--format=csv"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         output = results.stdout.decode('utf-8').split('\n')[1].split(",")
-        table = PrettyTable(["name", output[0]])
+        table = PrettyTable([" ", output[0]])
         table.add_row(["VBIOS", output[1]])
         table.add_row(["driver version", output[2]])
         table.add_row(["GPU memory capacity", output[3]])
