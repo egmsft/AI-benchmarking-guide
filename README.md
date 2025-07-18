@@ -119,7 +119,7 @@ LLM Inference Workloads: `llm`
 - The [`models`](https://github.com/Azure/AI-benchmarking-guide/blob/b2d64036d7ba6d4171e0f1ece26967dc97c7740f/config.json#L83) field in `config.json` contains all the inference models that can be benchmarked. To run benchmark for a specific model, set `use_model: true`. They are all set to `false` by default.
 - All the AMD models in `config.json` are marked with `"type": "amd"`
 - All the NVIDIA models in `config.json` are marked with `"type": "nvidia"`
-- Test results will be stored in the `Outputs` directory.
+- Test results will be stored in a markdown file in the `Outputs` directory.
 
 You can find example of results for the ND A100 v4, ND H100 v5 and ND H200 v5 virtual machines stored under [`Azure_Results`](https://github.com/Azure/AI-benchmarking-guide/tree/main/Azure_Results).
 
@@ -136,4 +136,5 @@ You can find example of results for the ND A100 v4, ND H100 v5 and ND H200 v5 vi
        "data-root":"/mnt/resource_nvme/docker", 
   }
   ```
-  note that this won't be the path to the NVMe disk on all machines, so check to make sure.
+  - Note that this won't be the path to the NVMe disk on all machines, so check to make sure.
+  - You may need to perform the docker [`post-installation steps`](https://docs.docker.com/engine/install/linux-postinstall/) to complete the docker reconfiguration.
