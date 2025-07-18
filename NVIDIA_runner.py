@@ -21,9 +21,9 @@ current = os.getcwd()
 tools.create_dir("Outputs")
 
 def get_system_specs():
+    output = results.stdout.decode('utf-8').split('\n')[1].split(",")
     if not os.path.exists(current +  "/Outputs/" + host_name + "_summary.md"):
         results = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name,vbios_version,driver_version,memory.total", "--format=csv"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        output = results.stdout.decode('utf-8').split('\n')[1].split(",")
         table = PrettyTable([" ", output[0]])
         table.add_row(["VBIOS", output[1]])
         table.add_row(["driver version", output[2]])
@@ -42,7 +42,7 @@ def get_system_specs():
             table.add_row(["pytorch", pyt])
         print(table)
         tools.export_markdown(output[0].strip() + " Benchmarking Guide", "", table)
-        return output[0].strip()
+    return output[0].strip()
 
 def run_CublasLt():
     test = gemm.GEMMCublastLt("config.json",host_name) 
