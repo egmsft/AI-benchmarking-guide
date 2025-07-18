@@ -21,8 +21,8 @@ current = os.getcwd()
 tools.create_dir("Outputs")
 
 def get_system_specs():
-    output = results.stdout.decode('utf-8').split('\n')[1].split(",")
     results = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name,vbios_version,driver_version,memory.total", "--format=csv"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    output = results.stdout.decode('utf-8').split('\n')[1].split(",")
     if not os.path.exists(current +  "/Outputs/" + host_name + "_summary.md"):
         table = PrettyTable([" ", output[0]])
         table.add_row(["VBIOS", output[1]])
