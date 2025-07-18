@@ -79,7 +79,7 @@ Installation of benchmark dependencies requires multiple steps.
 A convenience script `install-dependencies.sh` is provided to simplify installation.
 
 ```bash
-install-dependencies.sh 
+./install-dependencies.sh 
 ```
 
 ### NVIDIA
