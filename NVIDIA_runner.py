@@ -39,7 +39,7 @@ def get_system_specs():
         ubuntu = results.stdout.decode('utf-8').strip().split("\t")[1]
         table.add_row(["ubuntu version", ubuntu])
         results = subprocess.run("pip list | grep 'torch '", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        pyt = results.stdout.decode('utf-8').strip().split(" ")[1]
+        pyt = results.stdout.decode('utf-8').strip().split(" ")[-1]
         table.add_row(["pytorch", pyt])
     print(table)
     tools.export_markdown(output[0].strip() + "Benchmarking Guide", "", table)
