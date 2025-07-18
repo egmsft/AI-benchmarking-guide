@@ -142,5 +142,5 @@ class GEMMCublastLt:
         for item in buffer:
             table1.add_row(item)
         print(table1)
-        tools.export_markdown("GEMM CuBLASLt", "The results shown below are with random initialization (best representation of real-life workloads) " + self.datatype +  ", and " + self.w + " warmup iterations.", table1)
+        tools.export_markdown("GEMM CuBLASLt", "The results shown below are with random initialization (best representation of real-life workloads) " + self.datatype +  ", and " + str(self.w) + " warmup iterations.", table1)
         os.chdir(current)
