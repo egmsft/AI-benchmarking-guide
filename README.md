@@ -14,7 +14,7 @@ Inefficient workload optimization can significantly increase operational costs f
 ## Tests Included - NVIDIA
 
 ### 1. Microbenchmark - CublasLt GEMM
-The [CuBLASLt General Matrix-to-matrix Multiply](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/GEMMCublasLt.py) (GEMM) is a performance evaluation test for the CUDA Basic Linear Algebra Subroutines (CuBLAS) library for matrix and vector operations that leverages the parallel processing capabilities of GPUs. The benchmark is designed to assess the speed of matrix-to-matrix multiplication, which is the fundamental operation in AI applications, by measuring for varying matrix sizes (m, n, and k). The results shown below are with random initialization (best representation of real-life workloads) and datatype FP8.
+[CuBLASLt General Matrix-to-matrix Multiply](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/GEMMCublasLt.py) (GEMM) is a performance evaluation test for the CUDA Basic Linear Algebra Subroutines (CuBLAS) library for matrix and vector operations that leverages the parallel processing capabilities of GPUs. The benchmark is designed to assess the speed of matrix-to-matrix multiplication, which is the fundamental operation in AI applications, by measuring for varying matrix sizes (m, n, and k). The results shown below are with random initialization (best representation of real-life workloads) and datatype FP8.
 
 In the guide, we run CuBLASLt on various matrix sizes. See the [`run_model_sizes`](https://github.com/Azure/AI-benchmarking-guide/blob/b2d64036d7ba6d4171e0f1ece26967dc97c7740f/Benchmarks/NVIDIA/GEMMCublasLt.py#L244) function in `GEMMCublasLt.py`.
 
@@ -33,7 +33,7 @@ The [NV Bandwidth](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benc
 [FlashAttention](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/FlashAttention.py) is an algorithm to speed up attention and reduce the memory footprint for Natural Language Models—without any approximation. It is meant to speed up training and inference by reordering the attention computation and leveraging classical techniques (tiling, recomputation) to reduce memory usage from quadratic to linear in sequence length.
 
 ### 6. End-to-end Inference Workloads
-To assess how different system components (as tested by the microbenchmarks) affect overall performance, we suggetsing running some [end-to-end workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLMBenchmark.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (8B, 70B, and 405B). The performance of the model inferencing (throughput) is measured in tokens per second, accounting for both processing input tokens and generating output tokens. The workloads run in a TensorRT-LLM environment. Users need huggingface credentials to download all the model weigths. Visit [huggingface.co](https://huggingface.co/) to create an account and obtain access to the models. After obtaining your credentials, use `huggingface-cli login` to input your access token.
+To assess how different system components (as tested by the microbenchmarks) affect overall performance, we suggetsing running some [end-to-end workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLMBenchmark.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (8B, 70B, and 405B). The performance of the model inferencing (throughput) is measured in tokens per second, accounting for both processing input tokens and generating output tokens. The workloads run in a TensorRT-LLM environment. Users need huggingface credentials to download all the model weigths.
 
 ### 7. CPU STREAM Benchmark 
 The [CPU STREAM](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/CPUStream.py) benchmark measures memory bandwidth performance rather than raw CPU speed. It evaluates how efficiently a system can move data between the CPU and RAM, which is crucial for memory-intensive applications like scientific computing and HPC.
@@ -64,7 +64,7 @@ The [NV Bandwidth](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benc
 [FlashAttention](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/AMD/FlashAttention.py) is an algorithm to speed up attention and reduce the memory footprint for Natural Language Models—without any approximation. It is meant to speed up training and inference by reordering the attention computation and leveraging classical techniques (tiling, recomputation) to reduce memory usage from quadratic to linear in sequence length.
 
 ### 6. End-to-end Inference Workloads
-To assess how different system components (as tested by the microbenchmarks) affect overall performance, we suggetsing running some [end-to-end workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/AMD/LLMBenchmark.py). The models we used for benchmarking are the current industry standards across various sizes: Mistral (7B parameters), LLAMA 3 (8B, 70B, and 405B). The performance of the model inferencing (throughput) is measured in tokens per second, accounting for both processing input tokens and generating output tokens. The workloads run in a vLLM environment. Users need huggingface credentials to download all the model weigths. Visit [huggingface.co](https://huggingface.co/) to create an account and obtain access to the models. After obtaining your credentials, use `huggingface-cli login` to input your access token.
+To assess how different system components (as tested by the microbenchmarks) affect overall performance, we suggetsing running some [end-to-end workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/AMD/LLMBenchmark.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (8B, 70B, and 405B). The performance of the model inferencing (throughput) is measured in tokens per second, accounting for both processing input tokens and generating output tokens. The workloads run in a vLLM environment. Users need huggingface credentials to download all the model weigths. 
 
 
 # HOW TO RUN THE BENCHMARKS
@@ -80,6 +80,17 @@ A convenience script `install-dependencies.sh` is provided to simplify installat
 
 ```bash
 ./install-dependencies.sh 
+```
+
+If you wish to run LLM benchmarks, make sure to correctly set the huggingface home directory. This is where the model weights will be downloaded:
+
+```
+export HF_HOME=$PWD
+```
+Then login with your huggingface token (obtained from [huggingface.co](https://huggingface.co/))
+
+```
+huggingface-cli login
 ```
 
 ### NVIDIA
