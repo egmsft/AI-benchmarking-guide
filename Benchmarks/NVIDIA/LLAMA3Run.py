@@ -36,7 +36,7 @@ class LLAMA3Pretraining:
                     train_times.append(float(match.group(3)))
         
         # calculate steady state time value
-        def detect_steady(arr, window_size=20, std_thresh=0.01, min_windows=3):
+        def detect_steady(arr, window_size=10, std_thresh=0.1, min_windows=3):
             consistent = 0
             start_idx = None
             for i in range(len(arr) - window_size + 1):
@@ -53,8 +53,8 @@ class LLAMA3Pretraining:
             steady = np.mean(arr[start_idx:])
             return start_idx, steady
             
-        time_idx, time_ss = detect_steady(train_times)
-        loss_idx, loss_ss = detect_steady(train_losses)
+        time_idx, time_ss = detect_steady(train_times, std_thresh=1)
+        loss_idx, loss_ss = detect_steady(train_losses, std_thresh=0.1)
 
         if time_ss is not None:
             tools.write_log(f"Time steady-state: {time_ss:.4f}s starting at step {global_steps[time_idx]}")
@@ -90,7 +90,7 @@ class LLAMA3Pretraining:
         annot = []
         if loss_ss is not None: annot.append(f"The loss steady state is {loss_ss:.2f}")
         if time_ss is not None: annot.append(f"The time steady state is {time_ss:.2f}s")
-        fig.text(0.5, 0.03, ";  ".join(annot), ha='center', fontsize=12, style='italic')
+        fig.text(0.5, 0.01, ";  ".join(annot), ha='center', fontsize=12, style='italic')
 
         # save to outputs folder
         plot_path = f"Outputs/LLAMA3_8B_Pretrain_Results"
