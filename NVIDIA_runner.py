@@ -14,32 +14,35 @@ from Benchmarks.NVIDIA import Multichase as Multichase
 from Benchmarks.NVIDIA import LLMBenchmark as llmb
 from Benchmarks.NVIDIA import LLAMA3Run as llama3pre  
 from Infra import tools
+from prettytable import PrettyTable
 
 host_name = tools.get_hostname()
 current = os.getcwd()
 tools.create_dir("Outputs")
 
 def get_system_specs():
-    file = open("Outputs/system_specs.txt", "w")
+    table = PrettyTable()
 
     results = subprocess.run(["nvidia-smi", "--query-gpu=gpu_name,vbios_version,driver_version,memory.total", "--format=csv"], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     output = results.stdout.decode('utf-8').split('\n')[1].split(",")
-    file.write("GPU name     : "+ output[0]+"\n")
-    file.write("VBIOS    : "+ output[1]+"\n")
-    file.write("driver version   : "+ output[2]+"\n")
-    file.write("GPU memory capacity  : "+ output[3]+"\n")
+    table.add_row(["GPU name", output[0]])
+    table.add_row(["VBIOS", output[1]])
+    table.add_row(["driver version", output[2]])
+    table.add_row(["GPU memory capacity", output[3]])
     
     results = subprocess.run("nvcc --version | grep release", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     cuda_version = results.stdout.decode('utf-8').split(",")[1].strip().split(" ")[1]
-    file.write("CUDA version     : "+cuda_version+"\n")
+    table.add_row(["CUDA version", cuda_version])
 
     if output[0].strip() != "NVIDIA Graphics Device" or "GB200" in output[0]:
         results = subprocess.run("lsb_release -a | grep Release", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         ubuntu = results.stdout.decode('utf-8').strip().split("\t")[1]
-        file.write("ubuntu version   : "+ubuntu+"\n")
-        file.write("pytorch version  : {torch.__version__}\n")
-
-    file.close()
+        table.add_row(["ubuntu version", ubuntu])
+        results = subprocess.run("pip list | grep 'torch '", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        pyt = results.stdout.decode('utf-8').strip().split("\t")[1]
+        table.add_row("pytorch", pyt])
+    print(table)
+    tools.export_markdown(output[0].strip() + "Benchmarking Guide", "", table)
     return output[0].strip()
 
 def run_CublasLt():
