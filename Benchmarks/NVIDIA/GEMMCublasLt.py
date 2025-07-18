@@ -11,14 +11,13 @@ class GEMMCublastLt:
     def __init__(self, path: str, machine: str, b: int = 1, i: int = 1000, w: int = 10000):
         self.name = "GEMMCublasLt"
         config = self.get_config(path)
-        self.m, self.n, self.k, self.duration, self.datatype = self.config_conversion(config)
+        self.datatype = self.config_conversion(config)
         self.b = b
         self.i = i
         self.w = w
         self.bindir = ''
         self.machine_name = machine
-        self.buffer = []
-
+       
         # A100 does not support fp8
         if "A100" in machine:
             self.datatype = "fp16"
@@ -32,26 +31,8 @@ class GEMMCublastLt:
         except KeyError:
             raise KeyError("no value found")
 
-    def parse_json(self, config, var):
-        if var == "duration":
-            return config["inputs"]["duration"]
-        if var == "datatype":
-            return config["inputs"]["datatype"]
-        start = config["inputs"][var]["start"]
-        end = config["inputs"][var]["end"]
-        interval = config["inputs"][var]["interval"]
-        data = [a for a in range(start, end, interval)]
-        if not data or data[-1] < end:
-            data.append(end)
-        return data
-
     def config_conversion(self, config):
-        m = self.parse_json(config, "m")
-        n = self.parse_json(config, "n")
-        k = self.parse_json(config, "k")
-        duration = self.parse_json(config, "duration")
-        datatype = self.parse_json(config, "datatype")
-        return m, n, k, duration, datatype
+        return config["datatype"]
 
     def build(self):
         bindir = tools.create_dir("bin")
