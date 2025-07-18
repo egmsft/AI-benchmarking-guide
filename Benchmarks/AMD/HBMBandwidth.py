@@ -96,12 +96,4 @@ class HBMBandwidth:
         table1.add_row(triad)
         table1.add_row(dot)
         print(table1)
-
-        with open(self.dir_path + '/Outputs/HBMBandwidth_Performance_results_' + self.machine_name +'.csv', 'w') as csvFile:
-            writer = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(["Operation","Min (TB/s)", "Max (TB/s)", "Mean (TB/s)"])
-            writer.writerow(copy)
-            writer.writerow(mul)
-            writer.writerow(add)
-            writer.writerow(triad)
-            writer.writerow(dot)
+        tools.export_markdown("HBM Bandwidth", "HBM bandwidth Results", table1)
