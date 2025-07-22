@@ -42,7 +42,7 @@ The [CPU STREAM](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchm
 The [Multichase](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/Multichase.py) benchmark is a memory latency benchmark designed to measure pointer-chasing latency in a system. Unlike traditional memory benchmarks like STREAM, which focus on memory bandwidth, Multichase is used to evaluate random memory access latency, which is crucial for workloads that rely on irregular memory access patterns, such as databases and graph processing.
 
 ### 9. LLAMA3 8B Pretraining Benchmark 
-The [LLAMA3 8B Pretraining](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLAMA3Pretraining.py) benchmark is a performance benchmark designed to measure training loss and training time per step for pretraining of LLaMA3 8B. The workload runs inside a NeMo docker environment. 
+The [LLAMA3 8B Pretraining](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLAMA3Run.py) benchmark is a performance benchmark designed to measure training loss and training time per step for pretraining of LLaMA3 8B. The workload runs inside a NeMo docker environment. 
 
 ## Tests Included - AMD
 
