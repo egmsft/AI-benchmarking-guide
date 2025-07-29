@@ -12,7 +12,7 @@ from Benchmarks.NVIDIA import FIO
 from Benchmarks.NVIDIA import CPUStream as CPU
 from Benchmarks.NVIDIA import Multichase as Multichase
 from Benchmarks.NVIDIA import LLMBenchmark as llmb
-from Benchmarks.NVIDIA import LLAMA3Run as llama3pre  
+from Benchmarks.NVIDIA import LLAMA3Run as llama3pre
 from Infra import tools
 from prettytable import PrettyTable
 
@@ -45,10 +45,10 @@ def get_system_specs():
     return output[0].strip()
 
 def run_CublasLt():
-    test = gemm.GEMMCublastLt("config.json",host_name) 
+    test = gemm.GEMMCublastLt("config.json",host_name)
     test.build()
     test.run_model_sizes()
-   
+
 def run_HBMBandwidth():
     if "GB200" in sku_name:
         print("HBM bandwidth Test not supported on GB200 yet")
@@ -80,11 +80,11 @@ def run_CPUStream():
     test = CPU.CPUStream("config.json", host_name)
     test.build()
     test.run()
-    
+
 def run_FIO():
     test = FIO.FIO("config.json", host_name)
     test.run()
-    
+
 def run_LLMBenchmark():
     test = llmb.LLMBenchmark("config.json", current, host_name)
     test.install_requirements()
@@ -92,8 +92,8 @@ def run_LLMBenchmark():
     test.download_models()
     test.run_benchmark()
 
-def run_LLAMA3Pretrain():
-    test = llama3pre.LLAMA3Pretraining("config.json", host_name)
+def run_LLAMA3Pretrain(model_size="8b"):
+    test = llama3pre.LLAMA3Pretraining("config.json", host_name, model_size)
     test.run()
 
 sku_name = get_system_specs()
@@ -106,22 +106,22 @@ if ("gemm" in arguments):
     match = True
     run_CublasLt()
     os.chdir(current)
-    
+
 if ("nccl" in arguments):
     match = True
     run_NCCLBandwidth()
     os.chdir(current)
-    
+
 if ("hbm" in arguments):
     match = True
     run_HBMBandwidth()
     os.chdir(current)
-    
+
 if ("nv" in arguments):
     match = True
     run_NVBandwidth()
     os.chdir(current)
-    
+
 if ("fa"  in arguments):
     match = True
     run_FlashAttention()
@@ -136,22 +136,27 @@ if ("cpustream" in arguments):
     match = True
     run_CPUStream()
     os.chdir(current)
-    
+
 if ("fio" in arguments):
     match = True
     run_FIO()
     os.chdir(current)
-    
+
 if ("llm" in arguments):
     match = True
     run_LLMBenchmark()
     os.chdir(current)
 
-if ("llama_pretrain" in arguments):
+if ("llama_8b_pretrain" in arguments):
     match = True
-    run_LLAMA3Pretrain()
+    run_LLAMA3Pretrain("8b")
     os.chdir(current)
-    
+
+if ("llama_3b_pretrain" in arguments):
+    match = True
+    run_LLAMA3Pretrain("3b")
+    os.chdir(current)
+
 if ("all" in arguments):
     match = True
     run_CublasLt()
@@ -166,10 +171,14 @@ if ("all" in arguments):
     os.chdir(current)
     run_NVBandwidth()
     os.chdir(current)
+    run_FIO()
+    os.chdir(current)
     run_FlashAttention()
     os.chdir(current)
-    run_FIO()
     run_LLMBenchmark()
-if not match: 
-    print("Usage: python3 NVIDIA_runner.py [arg]\n   or: python3 NVIDIA_runner.py [arg1] [arg2] ... to run more than one test e.g python3 NVIDIA_runner.py hbm nccl\nArguments are as follows, and are case insensitive:\nAll tests:  all\nCuBLASLt GEMM:  gemm\nNCCL Bandwidth: nccl\nHBMBandwidth:   hbm\nNV Bandwidth:   nv\nFlash Attention: fa\nFIO Tests:   fio\nLLM Inference Workloads: llm\nCPU Stream: cpustream\nMultichase:  multichase")
-    
+    os.chdir(current)
+    run_LLAMA3Pretrain("8b")
+    os.chdir(current)
+    run_LLAMA3Pretrain("3b")
+if not match:
+    print("Usage: python3 NVIDIA_runner.py [arg]\n   or: python3 NVIDIA_runner.py [arg1] [arg2] ... to run more than one test e.g python3 NVIDIA_runner.py hbm nccl\nArguments are as follows, and are case insensitive:\nAll tests:  all\nCuBLASLt GEMM:  gemm\nNCCL Bandwidth: nccl\nHBMBandwidth:   hbm\nNV Bandwidth:   nv\nFIO Tests:   fio\nFlash Attention: fa\n   LLM Inference Workloads: llm\nCPU Stream: cpustream\nMultichase:  multichase\nLLAMA 8B Pretrain:  llama_8b_pretrain\nLLAMA 3B Pretrain: llama_3b_pretrain")

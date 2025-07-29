@@ -1,5 +1,6 @@
 import json
 import subprocess
+import argparse
 import time
 import numpy as np
 import nemo_run as run
@@ -10,6 +11,15 @@ from nemo.collections.llm.recipes.precision.mixed_precision import (
     fp16_with_fp8_mixed
 )
 
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_size", type=str, default="8b", choices=["8b", "3b"])
+    args, _ = parser.parse_known_args()
+    return args
+
+args = parse_args()
+
 def load_config():
     with open("config.json") as f:
         return json.load(f)["LLAMA3Pretraining"]
@@ -19,9 +29,15 @@ def configure_recipe(cfg, nodes=1, gpus_per_node=4):
     precision = cfg.get("precision", "fp16").lower()
     plugin = fp16_with_fp8_mixed() if precision == "fp8" else fp16_mixed()
 
-    recipe = llm.llama3_8b.pretrain_recipe(
-        dir="/checkpoints/llama3",
-        name="llama3_pretraining",
+    model_size = args.model_size
+    if model_size == "3b":
+        recipe_fn = llm.llama32_3b.pretrain_recipe
+    else:
+        recipe_fn = llm.llama3_8b.pretrain_recipe
+
+    recipe = recipe_fn(
+        dir="/checkpoints/llama3_{model_size}",
+        name=f"llama3_{model_size}_pretraining",
         num_nodes=nodes,
         num_gpus_per_node=gpus_per_node,
     )
@@ -75,7 +91,7 @@ def run_pretraining():
         devices=recipe.trainer.devices
     )
 
-    run.run(recipe, executor=executor, name="llama3_8b_pretraining")
+    run.run(recipe, executor=executor, name=f"llama3_{args.model_size}_pretraining")
 
 
 if __name__ == "__main__":
