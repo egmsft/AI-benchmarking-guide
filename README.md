@@ -32,17 +32,17 @@ The [NV Bandwidth](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benc
 ### 5. Microbenchmark - Flash Attention
 [FlashAttention](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/FlashAttention.py) is an algorithm to speed up attention and reduce the memory footprint for Natural Language Models—without any approximation. It is meant to speed up training and inference by reordering the attention computation and leveraging classical techniques (tiling, recomputation) to reduce memory usage from quadratic to linear in sequence length.
 
-### 6. End-to-end Inference Workloads
-To assess how different system components (as tested by the microbenchmarks) affect overall performance, we suggetsing running some [end-to-end workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLMBenchmark.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (8B, 70B, and 405B). The performance of the model inferencing (throughput) is measured in tokens per second, accounting for both processing input tokens and generating output tokens. The workloads run in a TensorRT-LLM environment. Users need huggingface credentials to download all the model weigths.
-
-### 7. CPU STREAM Benchmark 
+### 6. CPU STREAM Benchmark 
 The [CPU STREAM](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/CPUStream.py) benchmark measures memory bandwidth performance rather than raw CPU speed. It evaluates how efficiently a system can move data between the CPU and RAM, which is crucial for memory-intensive applications like scientific computing and HPC.
 
-### 8. Multichase Benchmark 
+### 7. Multichase Benchmark 
 The [Multichase](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/Multichase.py) benchmark is a memory latency benchmark designed to measure pointer-chasing latency in a system. Unlike traditional memory benchmarks like STREAM, which focus on memory bandwidth, Multichase is used to evaluate random memory access latency, which is crucial for workloads that rely on irregular memory access patterns, such as databases and graph processing.
 
-### 9. LLAMA3 3B/8B Pretraining Benchmark 
-The [LLAMA3 Pretraining](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLAMA3Run.py) benchmark is a performance benchmark designed to measure training loss and training time per step for pretraining of LLAMA3 3B and 8B. The workload runs inside a NeMo docker environment. 
+### 8. End-to-end Inference Workloads
+To assess how different system components (as tested by the microbenchmarks) affect overall performance, we suggetsing running some [end-to-end workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLMBenchmark.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (8B, 70B, and 405B). The performance of the model inferencing (throughput) is measured in tokens per second, accounting for both processing input tokens and generating output tokens. The workloads run in a TensorRT-LLM environment. Users need huggingface credentials to download all the model weigths.
+
+### 9. End-to-end Pretraining Workloads
+To assess the overall performance of GB200, we suggest running some [end-to-end pretrain workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLAMA3Run.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (3B, 8B). The performance of the model is measured in pretraining time per step. The workloads run in a Docker environment. Users need NeMo credentials to pull the container.
 
 ## Tests Included - AMD
 

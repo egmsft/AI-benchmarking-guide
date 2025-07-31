@@ -63,7 +63,10 @@ def configure_recipe(cfg, nodes=1, gpus_per_node=4):
     recipe.trainer.accelerator = "gpu"
     recipe.trainer.devices = gpus_per_node
 
-    recipe.trainer.max_time = "0:04:00:00" # stop after 4 hours
+    if model_size == "3b":
+        recipe.trainer.max_time = "0:02:00:00" # stop after 2 hours
+    else:
+        recipe.trainer.max_time = "0:04:00:00" # stop after 4 hours
     return recipe
 
 

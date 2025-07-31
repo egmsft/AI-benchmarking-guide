@@ -5,6 +5,7 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 from Infra import tools
+from prettytable import PrettyTable
 from datetime import datetime
 
 class LLAMA3Pretraining:
@@ -100,6 +101,8 @@ class LLAMA3Pretraining:
         tools.write_log(f"Training loss and time plot with steady state saved to {plot_path}") # print to log.txt
         plt.close()
 
+        return time_ss
+
 
     def run(self):
         log_path = f"Outputs/log.txt" # log to log file
@@ -125,4 +128,13 @@ class LLAMA3Pretraining:
 
         # now plot the results
         print(f"Pretraining has finished with output saved to: {log_path}. Now plotting.")
-        self.plot_results(log_path)
+        time_ss = self.plot_results(log_path)
+
+        # add summary to markdown
+        table = PrettyTable()
+        table.field_names = ["Metric", "Value"]
+        table.add_row(["Model Size", self.model_size])
+        table.add_row(["Pretrain Time Steady State", time_ss if time_ss is not None else "None"])
+
+        # Export the table to markdown
+        tools.export_markdown(f"LLAMA3 {self.model_size} Pretraining Summary", f"Pretraining results for LLAMA3 {self.model_size} on {self.machine_name}.", table)
