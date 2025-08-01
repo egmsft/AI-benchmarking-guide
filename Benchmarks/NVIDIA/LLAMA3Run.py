@@ -5,16 +5,18 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 from Infra import tools
+from prettytable import PrettyTable
 from datetime import datetime
 
 class LLAMA3Pretraining:
-    def __init__(self, config_path: str, machine_name: str):
+    def __init__(self, config_path: str, machine_name: str, model_size: str = "8b"):
         self.name = "LLAMA3Pretraining"
         self.machine_name = machine_name
         self.config = self.get_config(config_path) # get config path from JSON
         self.mount_path = self.config.get("mount_path", ".") # mount docker container
-        self.training_script = self.config.get("training_script", "Training/ExecuteLLAMA3Pretrain.py")
+        self.training_script = self.config.get("training_script", "Training/LLAMA3Recipe.py")
         self.container = self.config.get("docker_image", "nvcr.io/nvidia/nemo:25.04")
+        self.model_size = model_size
 
     def get_config(self, path: str):
         with open(path) as f:
@@ -23,10 +25,10 @@ class LLAMA3Pretraining:
             return data[self.name]
         except KeyError:
             raise KeyError(f"{self.name} section not found in config")
-        
+
     def plot_results(self, file_path: str = None):
         # extract values from the output file
-        global_steps, train_losses, train_times = [], [], [] 
+        global_steps, train_losses, train_times = [], [], []
         with open(file_path, "r", encoding="utf-8") as f:
             for line in f:
                 match = re.search(r"global_step: (\d+) .* reduced_train_loss: ([\d.]+) .* train_step_timing in s: ([\d.]+)", line)
@@ -34,7 +36,7 @@ class LLAMA3Pretraining:
                     global_steps.append(int(match.group(1)))
                     train_losses.append(float(match.group(2)))
                     train_times.append(float(match.group(3)))
-        
+
         # calculate steady state time value
         def detect_steady(arr, window_size=10, std_thresh=0.1, min_windows=3):
             consistent = 0
@@ -52,7 +54,7 @@ class LLAMA3Pretraining:
                 return None, None
             steady = np.mean(arr[start_idx:])
             return start_idx, steady
-            
+
         time_idx, time_ss = detect_steady(train_times, std_thresh=1)
         loss_idx, loss_ss = detect_steady(train_losses, std_thresh=0.1)
 
@@ -93,11 +95,13 @@ class LLAMA3Pretraining:
         fig.text(0.5, 0.01, ";  ".join(annot), ha='center', fontsize=12, style='italic')
 
         # save to outputs folder
-        plot_path = f"Outputs/LLAMA3_8B_Pretrain_Results"
+        plot_path = f"Outputs/LLAMA3_{self.model_size}_Pretrain_Results"
         plt.savefig(plot_path, dpi=300)
         print(f"Training loss and time plot with steady state saved to {plot_path}")
         tools.write_log(f"Training loss and time plot with steady state saved to {plot_path}") # print to log.txt
         plt.close()
+
+        return time_ss
 
 
     def run(self):
@@ -108,20 +112,29 @@ class LLAMA3Pretraining:
         print("Pretraining will finish in 4 hours.")
 
         command = [
-            "sudo", "docker", "run", "--rm", "-i",
+            "docker", "run", "--rm", "-i",
             "--gpus", "all",
             "--ipc=host",
             "--ulimit", "memlock=-1",
             "--ulimit", "stack=67108864",
             "-v", f"{self.mount_path}:/workspace/nemo-run",
             self.container,
-            "bash", "-c", f"cd /workspace/nemo-run && python {self.training_script}"
+            "bash", "-c", f"cd /workspace/nemo-run && python {self.training_script} --model_size {self.model_size}"
         ]
 
         # launch command and write to log file (this shows all info about epoch, training time, etc.)
         with open("Outputs/log.txt", "w") as file:
             subprocess.run(command, stdout=file, stderr=subprocess.STDOUT, text=True)
-        
-        # now plot the results 
+
+        # now plot the results
         print(f"Pretraining has finished with output saved to: {log_path}. Now plotting.")
-        self.plot_results(log_path)
+        time_ss = self.plot_results(log_path)
+
+        # add summary to markdown
+        table = PrettyTable()
+        table.field_names = ["Metric", "Value"]
+        table.add_row(["Model Size", self.model_size])
+        table.add_row(["Pretrain Time Steady State", time_ss if time_ss is not None else "None"])
+
+        # Export the table to markdown
+        tools.export_markdown(f"LLAMA3 {self.model_size} Pretraining Summary", f"Pretraining results for LLAMA3 {self.model_size} on {self.machine_name}.", table)
