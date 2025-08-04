@@ -45,7 +45,7 @@ def get_system_specs():
     return output[0].strip()
 
 def run_CublasLt():
-    test = gemm.GEMMCublastLt("config.json",host_name)
+    test = gemm.GEMMCublastLt("config.json",sku_name)
     test.build()
     test.run_model_sizes()
 
@@ -53,47 +53,47 @@ def run_HBMBandwidth():
     if "GB200" in sku_name:
         print("HBM bandwidth Test not supported on GB200 yet")
         return
-    test = HBM.HBMBandwidth("config.json", host_name)
+    test = HBM.HBMBandwidth("config.json", sku_name)
     test.build()
     test.run()
 
 def run_NVBandwidth():
-    test = NV.NVBandwidth("config.json", host_name)
+    test = NV.NVBandwidth("config.json", sku_name)
     test.build()
     test.run()
 
 def run_NCCLBandwidth():
-    test = NCCL.NCCLBandwidth("config.json", host_name)
+    test = NCCL.NCCLBandwidth("config.json", sku_name)
     test.build()
     test.run()
 
 def run_FlashAttention():
-    test = FA.FlashAttention("config.json", host_name)
+    test = FA.FlashAttention("config.json", sku_name)
     test.run()
 
 def run_Multichase():
-    test = Multichase.Multichase("config.json", host_name)
+    test = Multichase.Multichase("config.json", sku_name)
     test.build()
     test.run()
 
 def run_CPUStream():
-    test = CPU.CPUStream("config.json", host_name)
+    test = CPU.CPUStream("config.json", sku_name)
     test.build()
     test.run()
 
 def run_FIO():
-    test = FIO.FIO("config.json", host_name)
+    test = FIO.FIO("config.json", sku_name)
     test.run()
 
 def run_LLMBenchmark():
-    test = llmb.LLMBenchmark("config.json", current, host_name)
+    test = llmb.LLMBenchmark("config.json", current, sku_name)
     test.install_requirements()
     test.prepare_datasets()
     test.download_models()
     test.run_benchmark()
 
 def run_LLAMA3Pretrain(model_size="8b"):
-    test = llama3pre.LLAMA3Pretraining("config.json", host_name, model_size)
+    test = llama3pre.LLAMA3Pretraining("config.json", sku_name, model_size)
     test.run()
 
 sku_name = get_system_specs()
