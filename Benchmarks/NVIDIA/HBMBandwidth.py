@@ -46,12 +46,13 @@ class HBMBandwidth:
 
         build_path = os.path.join(current, "BabelStream")
         os.chdir(build_path)
-
         babelstream_build_path = os.path.join(build_path, "build")
 
         arch ="sm_90"
         if "A100" in self.machine_name:
             arch = "sm_80"
+        if "GB200" in self.machine_name:
+            arch = "sm_100"
 
         if not os.path.isdir(babelstream_build_path):
             os.mkdir(babelstream_build_path)
@@ -80,7 +81,6 @@ class HBMBandwidth:
     def run(self):
         current = os.getcwd()
         print("Running HBM Bandwidth...")
-
         runs_executed = 0
         buffer = []
         while runs_executed < self.num_runs:
@@ -104,7 +104,6 @@ class HBMBandwidth:
         maximum = max(results)/1000000
         minimum = min(results)/1000000
         return [round(minimum, 2), round(maximum, 2), round(mean, 2)]
-
 
     def save_results(self):
         copy = ["Copy"]
