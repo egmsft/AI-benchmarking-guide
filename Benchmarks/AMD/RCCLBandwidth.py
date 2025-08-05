@@ -10,26 +10,9 @@ class RCCLBandwidth:
     def __init__(self, config_path:str, dir_path:str, machine: str):
         self.name='RCCLBandwidth'
         self.machine_name = machine
-        config = self.get_config(config_path)
-        self.start, self.end, self.num_gpus = self.config_conversion(config)
         self.dir_path = dir_path
         self.container = None
         self.buffer = []
-
-    def get_config(self, path: str):
-        file = open(path)
-        data = json.load(file)
-        file.close()
-        try:
-            return data[self.name]
-        except KeyError:
-            raise KeyError("no value found")
-
-    def parse_json(self, config):
-        return config['inputs']['start'], config['inputs']['end'], config['inputs']['num_gpus']
-
-    def config_conversion(self, config)->tuple[list, list, list]:
-        return self.parse_json(config)
 
     def create_container(self):
         client = docker.from_env()
@@ -94,6 +77,7 @@ class RCCLBandwidth:
             results = self.container.exec_run(run_cmd, stderr=True)
             if results.exit_code != 0:
                 tools.write_log(results.output.decode('utf-8'))
+                self.container.kill()
                 return
             res = results.output.decode('utf-8').split('\n')
             log = []
@@ -102,22 +86,11 @@ class RCCLBandwidth:
                 if len(line) == 13:
                     log.append(line[11])
             buffer.append(log)
-
+        self.container.kill()
         table1 = PrettyTable()
         runs = ["Message Size", "Tree", "Ring", "NVLS", "NVLSTree"]
 
         for i in range(len(buffer)):
             table1.add_column(runs[i], buffer[i])
-
         print(table1)
-        self.buffer=buffer
-        self.container.kill()
-        self.save()
-
-    def save(self):
-        with open('Outputs/RCCLBandwidth_' + self.machine_name + '.csv', 'w') as csvFile:
-            writer = csv.writer(csvFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(["Message Size", "Tree", "Ring", "NVLS", "NVLSTree"])
-            for i in range(len(self.buffer[0])):
-                row = [self.buffer[0][i], self.buffer[1][i], self.buffer[2][i], self.buffer[3][i], self.buffer[4][i]]
-                writer.writerow(row)
+        tools.export_markdown("RCCL Bandwidth", "The values (in GB/s) are the bus bandwidth values obtained from the RCCL AllReduce tests with Tree, Ring, NVLS and NVLSTree algos (in-place operations), varying from 1KB to 8GB of data.", table1)
