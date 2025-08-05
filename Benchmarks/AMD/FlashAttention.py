@@ -1,17 +1,16 @@
 import subprocess
 import os
 import docker
+import re
+from prettytable import PrettyTable
 from Infra import tools
 
 class FlashAttention:
     def __init__(self, path:str, machine: str):
-
         self.name='FlashAttention'
         self.machine_name = machine
         self.dir_path = path
         self.container = None
-
-        self.buffer = []
 
     def create_container(self):
         client = docker.from_env()
@@ -49,16 +48,15 @@ class FlashAttention:
 
         results = subprocess.run('git checkout 418d677',shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         tools.write_log(tools.check_error(results))
-        #results = subprocess.run('GPU_ARCHS="gfx942" python3 setup.py install',shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         self.create_container()
         print("Running Flash Attention...")
-        #res = self.container.exec_run(f'/bin/sh -c cd {self.dir_path}/flash-attention')
-        res = self.container.exec_run(f'python3 {self.dir_path}/flash-attention/benchmarks/benchmark_flash_attention.py | grep -A 2 "batch_size=2, seqlen=8192 ###"')
+        res = self.container.exec_run(f'bash -c "python3 {self.dir_path}/flash-attention/benchmarks/benchmark_flash_attention.py | grep -A 2 "batch_size=2, seqlen=8192 ###""')
         tools.write_log(res.output.decode('utf-8'))
-        print(res.output.decode('utf-8'))
-
         self.container.kill()
 
-        file = open(self.dir_path + "/Outputs/FlashAttention_" + self.machine_name + ".txt", "w")
-        file.write(res.output.decode('utf-8'))
+        table = PrettyTable(["causal", "headdim", "Flash2 total (TFLOPs)", "Pytorch total (TFLOPs)"])
+        for m in re.findall(r"causal=(\w+), headdim=(\d+).*?fwd \+ bwd: ([\d.]+).*?fwd \+ bwd: ([\d.]+)", res.output.decode('utf-8'), re.DOTALL):
+            table.add_row([m[0], int(m[1]), float(m[2]), float(m[3])])
+        print(table)
+        tools.export_markdown("Flash Attention 2", "The performance (in TFLOPS), in table below, represents the performance for a batch size of 2, and a sequence length of 8192.", table)
