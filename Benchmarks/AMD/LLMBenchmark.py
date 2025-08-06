@@ -12,6 +12,7 @@ class LLMBenchmark:
         self.config = self.get_config(config_path)
         self.dir_path = dir_path
         self.precision = "half"
+        self.table = None
         self.container = None
         self.machine = machine
 
@@ -50,13 +51,15 @@ class LLMBenchmark:
     def run_benchmark(self):
         for model_name in self.config['models']:
             if self.config['models'][model_name]['use_model'] and self.config['models'][model_name]['type'] == "amd":
+                self.table = PrettyTable(["input len", "output len", "tp size", "throughput(tokens/s)"])
                 for tp_size in self.config['models'][model_name]['tp_sizes']:
+                    print(f"Benchmarking {model_name} with TP Size: {tp_size}")
                     for max_num_seq in self.config['models'][model_name]['max_num_seqs']:
                         for i in range(len(self.config['models'][model_name]['input_length'])):
                             for request in self.config['models'][model_name]['num_requests']:
                                 input_size = self.config['models'][model_name]['input_length'][i]
                                 output_size = self.config['models'][model_name]['output_length'][i]
-                                print(f"Benchmarking {model_name} | TP Size: {tp_size} | Input Size: {input_size} | Output Size: {output_size}")
+                                print(f" Input Size: {input_size}, Output Size: {output_size}...")
                                 run_benchmark_command = f'''
                                     /bin/bash -c \
                                     "python /app/vllm/benchmarks/benchmark_throughput.py \
@@ -77,31 +80,13 @@ class LLMBenchmark:
                                         --input-len {input_size} \
                                         --output-len {output_size}"
                                     '''
-
                                 rb1 = self.container.exec_run(run_benchmark_command)
-
                                 tools.write_log(rb1.output.decode('utf-8'))
-
                                 temp = rb1.output.decode('utf-8').split('\n')
                                 for line in temp:
                                     if "Throughput: " in line:
                                         result = line.split(' ')[6]
-                                        table1 = PrettyTable()
-                                        table1.add_row(['Model Name', model_name])
-                                        table1.add_row(['Input/Output lengths', str(input_size) + "/" + str(output_size)])
-                                        table1.add_row(['World Size (TP size)', str(tp_size)])
-                                        table1.add_row(['Throughput (tokens/sec)', str(result)])
-
-                                        print(table1.get_string(header=False))
-                                        self.save_data([model_name, str(input_size), str(output_size), str(tp_size), str(result)], 'Outputs/LLMBenchmark_' + self.machine + '.csv')
-
+                                        self.table.add_row([str(input_size), str(output_size), str(tp_size), str(result)])
+                print(self.table)
+                tools.export_markdown(model_name, "Performance results with FP8 quantization.", self.table)
         self.container.kill()
-
-    def save_data(self, data, file_path):
-        file_exists = os.path.exists(file_path)
-        # Open the file in append mode if it exists, otherwise create it
-        with open(file_path, mode='a', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file)
-            if not file_exists:
-                writer.writerow(["Model_name", "Input_length", "Output_length", "TP_size", "Tokens per sec"])
-            writer.writerow(data)
