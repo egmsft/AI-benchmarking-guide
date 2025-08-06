@@ -1,6 +1,7 @@
 import os
 import datetime
 import subprocess
+import json
 pwd = os.getcwd() + "/Outputs/log.txt"
 curr = os.getcwd()
 
@@ -76,3 +77,16 @@ def create_bm_entry(bmName, appName, sku, result):
         "notes": "",
         "appVersion": "string"
     }
+
+def post_benchmark_entry(entry, url):
+    json_data = json.dumps(entry)
+    curl_command = [
+        "curl",
+        "-X", "POST",
+        url,
+        "-H", "Content-Type: application/json",
+        "-d", json_data
+    ]
+    
+    result = subprocess.run(curl_command, capture_output=True, text=True)
+    return result.stdout, result.stderr
