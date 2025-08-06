@@ -1,26 +1,13 @@
 class GEMMHipBLAS:
     def __init__(self, path: str, dir_path: str, machine: str, i: int = 1000, w: int = 10000):
         self.name = "GEMMHipBLAS"
-        config = self.get_config(path)
-        self.datatype = self.config_conversion(config)
+        self.datatype = "FP8"
         self.dir_path = dir_path
         self.i = i
         self.w = w
         self.bindir = ''
         self.machine_name = machine
         self.container = None
-
-    def get_config(self, path: str):
-        file = open(path)
-        data = json.load(file)
-        file.close()
-        try:
-            return data[self.name]
-        except KeyError:
-            raise KeyError("no value found")
-
-    def config_conversion(self, config):
-        return config["datatype"]
 
     def create_container(self):
         client = docker.from_env()
