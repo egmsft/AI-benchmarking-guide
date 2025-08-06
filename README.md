@@ -125,17 +125,17 @@ FIO Tests:   `fio`\
 LLM Inference Workloads: `llm`
 
 ### Extras
+- Test results will be stored in a markdown file in the `Outputs` directory.
 - The console output and errors are logged in `Outputs/log.txt.`
-- The file [`config.json`](https://github.com/Azure/AI-benchmarking-guide/blob/main/config.json) contains the specific settings for the benchmarks.
-- The [`models`](https://github.com/Azure/AI-benchmarking-guide/blob/b2d64036d7ba6d4171e0f1ece26967dc97c7740f/config.json#L83) field in `config.json` contains all the inference models that can be benchmarked. To run benchmark for a specific model, set `use_model: true`. They are all set to `false` by default.
+- The file [`config.json`](https://github.com/Azure/AI-benchmarking-guide/blob/main/config.json) contains the specific settings for LLM benchmarks.
+- The [`models`](https://github.com/Azure/AI-benchmarking-guide/blob/77a67867be39c0418cf958e9485454a3c4d7415b/config.json#L7) field in `config.json` contains all the inference models that can be benchmarked. To run benchmark for a specific model, set `use_model: true`. They are all set to `false` by default.
 - All the AMD models in `config.json` are marked with `"type": "amd"`
 - All the NVIDIA models in `config.json` are marked with `"type": "nvidia"`
-- Test results will be stored in a markdown file in the `Outputs` directory.
 
-You can find example of results for the ND A100 v4, ND H100 v5 and ND H200 v5 virtual machines stored under [`Azure_Results`](https://github.com/Azure/AI-benchmarking-guide/tree/main/Azure_Results).
+You can find results of these benchmarks ran on various virtual machines in the [`Azure_Results`](https://github.com/Azure/AI-benchmarking-guide/tree/main/Azure_Results) directory.
 
 ### Storage
-- The benchmarks, especially LLM Benchmarks, take up a lot of space. Therefore, we recommend cloning this benchmark repository onto a mounted NVMe disk. 
+- We recommend cloning this benchmark repository onto a disk with at least 5TB if you plan on running LLM Benchmarks, because the model weights are massive. 
 - Some of the AMD benchmarks are ran in docker containers, which are automatically created and killed when the tests are ran. To make sure that these docker containers don't fill up your storage space, change the default location that docker stores its files. Do this by:
 
   `vim /etc/docker/daemon.json`
