@@ -3,57 +3,13 @@
         "datatype": "fp8e4m3"
     },
     
-    "GEMMHipBLAS": {
-        "inputs": {
-            "m": {
-                "start": 16,
-                "end": 4096,
-                "interval": 16
-            },
-            "n": {
-                "start": 16,
-                "end": 4096,
-                "interval": 16
-            },
-            "k": {
-                "start": 16,
-                "end": 4096,
-                "interval": 16
-            },
-            "duration": 120,
-            "datatype": "fp8e4m3"
-        }
-    },
-
-    "NCCLBandwidth": {
-        "inputs": {
-            "start": "8",
-            "end": "8G",
-            "num_gpus": 8
-        }
-    },
-
     "HBMBandwidth": {
         "inputs": {
             "interval": 10,
             "num_runs": 5
         }
     },
-
-    "RCCLBandwidth": {
-        "inputs": {
-            "start": "8",
-            "end": "8G",
-            "num_gpus": 8
-        }
-    },
-
-    "TransferBench": {
-        "inputs": {
-            "num_runs": 1,
-            "interval": 5
-        }
-    },
+    
     "LLMBenchmark": {
         "models": {
             "meta-llama/Llama-3.1-8B":{
