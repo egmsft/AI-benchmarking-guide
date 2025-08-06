@@ -1,13 +1,15 @@
+import os
 import subprocess
+from prettytable import PrettyTable
 from Infra import tools
 
 class FIO:
     def __init__(self, path: str, machine: str):
         self.name = "FIO"
         self.machine_name = machine
-        self.dir_path = path
 
     def run(self):
+        current = os.getcwd()
         print("Running FIO Tests...")
         tests = [
             ["read", "1M"],
@@ -19,26 +21,23 @@ class FIO:
             ["randwrite", "1k"],
             ["randread", "1k"]
         ]
-        file = open(self.dir_path + '/Outputs/FIO_results_' + self.machine_name +'.txt', 'w')
-
+        table = PrettyTable(["Test", "Batch Size(Bytes)", "Bandwidth"])
         for test in tests:
             results = subprocess.run(
-                "fio --bs=" + test[1] +  " --ioengine=libaio --iodepth=255 --directory=" + self.dir_path + "/Outputs --direct=1 --runtime=300 --numjobs=4 --rw=" +test[0]+ " --name=test --group_reporting --gtod_reduce=1 --size=10G | grep -A 1 ': bw='",
+                "fio --bs=" + test[1] +  " --ioengine=libaio --iodepth=255 --directory=" + current + "/Outputs --direct=1 --runtime=300 --numjobs=4 --rw=" +test[0]+ " --name=test --group_reporting --gtod_reduce=1 --size=10G | grep -A 1 ': bw='",
                 shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            tools.write_log(tools.check_error(results))
             res = results.stdout.decode('utf-8').split()[2].strip(",()")
+            table.add_row([test[0], test[1], res])
             res = test[0] + " BS=" + test[1] + ": " + res
-            print(res)
-            file.write(res + '\n')
-        
-        file.close()   
+        print(table)
+        tools.export_markdown("FIO Tests", "", table)
+
         results = subprocess.run(
             "rm Outputs/test*",
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        tools.write_log(tools.check_error(results))
