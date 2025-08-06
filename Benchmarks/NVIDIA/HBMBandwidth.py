@@ -1,4 +1,3 @@
-import json
 import os
 import statistics
 import subprocess
@@ -12,24 +11,8 @@ class HBMBandwidth:
         self.name = "HBMBandwidth"
         self.machine_name = machine
         config = self.get_config(path)
-        self.num_runs, self.interval = self.config_conversion(config)
-
+        self.num_runs, self.interval = 5, 10
         self.buffer = []
-
-    def get_config(self, path: str):
-        file = open(path)
-        data = json.load(file)
-        file.close()
-        try:
-            return data[self.name]
-        except KeyError:
-            raise KeyError("no value found")
-
-    def parse_json(self, config):
-        return config["inputs"]["num_runs"], config["inputs"]["interval"]
-
-    def config_conversion(self, config) -> tuple[list, list, list]:
-        return self.parse_json(config)
 
     def build(self):
         current = os.getcwd()
@@ -76,7 +59,6 @@ class HBMBandwidth:
             tools.write_log(tools.check_error(results))
         else:
             os.chdir(babelstream_build_path)
-
 
     def run(self):
         current = os.getcwd()
