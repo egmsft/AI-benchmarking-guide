@@ -3,6 +3,7 @@ import datetime
 import subprocess
 pwd = os.getcwd() + "/Outputs/log.txt"
 curr = os.getcwd()
+ubuntu = get_os_version()
 
 def create_dir(name: str):
     current = os.getcwd()
@@ -23,6 +24,11 @@ def check_error(results):
     if results.stderr:
         return results.stderr.decode("utf-8")
     return results.stdout.decode("utf-8")
+
+def get_os_version():
+    results = subprocess.run("lsb_release -a | grep Release", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    ubuntu = results.stdout.decode('utf-8').strip().split("\t")[1]
+    return ubuntu
 
 def get_hostname():
     results = subprocess.run(["hostname"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -47,3 +53,25 @@ def export_markdown(title, description, table = None):
         file.write(description + "\n")
         file.write(table)
         file.write("\n\n")
+        
+def create_bm_entry(bmName, appName, sku, result):
+    id = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+    return {
+        "jobId": id,
+        "appName": appName,
+        "bmName": bmName,
+        "nodes": "1",
+        "cores": "",
+        "sockets": "",
+        "result": result,
+        "totalRunTime": "",
+        "skuGen": "",
+        "sku": sku,
+        "os": ubuntu,
+        "BIOS": "",
+        "user": "azureuser",
+        "runCategory": "best",
+        "Run Date": "",
+        "notes": "",
+        "appVersion": "string"
+    }
