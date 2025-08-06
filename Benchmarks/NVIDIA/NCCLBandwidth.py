@@ -11,24 +11,8 @@ class NCCLBandwidth:
         self.name='NCCLBandwidth'
         self.machine_name = machine
         config = self.get_config(path)
-        self.start, self.end, self.num_gpus = self.config_conversion(config)
         self.buffer = []
         self.algo = "NVLS"
-
-    def get_config(self, path: str):
-        file = open(path)
-        data = json.load(file)
-        file.close()
-        try:
-            return data[self.name]
-        except KeyError:
-            raise KeyError("no value found")
-
-    def parse_json(self, config):
-        return config['inputs']['start'], config['inputs']['end'], config['inputs']['num_gpus']
-
-    def config_conversion(self, config)->tuple[list, list, list]:
-        return self.parse_json(config)
 
     def build(self):
         current = os.getcwd()
@@ -65,9 +49,8 @@ class NCCLBandwidth:
         num_gpus = str(subprocess.run("nvidia-smi --query-gpu=name --format=csv,noheader | wc -l", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode('utf-8')).strip()
         if num_gpus == '4':
             self.algo = "Ring"
-
         print("Running NCCL AllReduce on " + num_gpus + " GPUs")
-      
+
         results = subprocess.run('NCCL_ALGO='+ self.algo +' ./build/all_reduce_perf -b 8 -e 8G -f 2 -g ' + num_gpus + ' -n 40 | grep float', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         tools.write_log(tools.check_error(results))
         res = results.stdout.decode('utf-8').split('\n')
@@ -78,7 +61,6 @@ class NCCLBandwidth:
                 log.append(line[11])
 
         buffer.append(log)
-
         table1 = PrettyTable()
         runs = ["Message Size", "Bandwidth (" + self.algo + ")"]
         for i in range(len(buffer)):
