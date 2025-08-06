@@ -1,14 +1,8 @@
-import json
-import os
-from Infra import tools
-from prettytable import PrettyTable
-import docker
-
 class GEMMHipBLAS:
     def __init__(self, path: str, dir_path: str, machine: str, i: int = 1000, w: int = 10000):
         self.name = "GEMMHipBLAS"
         config = self.get_config(path)
-        self.m, self.n, self.k, self.duration, self.datatype = self.config_conversion(config)
+        self.datatype = self.config_conversion(config)
         self.dir_path = dir_path
         self.i = i
         self.w = w
@@ -25,26 +19,8 @@ class GEMMHipBLAS:
         except KeyError:
             raise KeyError("no value found")
 
-    def parse_json(self, config, var):
-        if var == "duration":
-            return config["inputs"]["duration"]
-        if var == "datatype":
-            return config["inputs"]["datatype"]
-        start = config["inputs"][var]["start"]
-        end = config["inputs"][var]["end"]
-        interval = config["inputs"][var]["interval"]
-        data = [a for a in range(start, end, interval)]
-        if not data or data[-1] < end:
-            data.append(end)
-        return data
-
     def config_conversion(self, config):
-        m = self.parse_json(config, "m")
-        n = self.parse_json(config, "n")
-        k = self.parse_json(config, "k")
-        duration = self.parse_json(config, "duration")
-        datatype = self.parse_json(config, "datatype")
-        return m, n, k, duration, datatype
+        return config["datatype"]
 
     def create_container(self):
         client = docker.from_env()
@@ -62,11 +38,10 @@ class GEMMHipBLAS:
             'tty': True,
             'detach': True
         }
-
         # Creates new Docker container
         print("Pulling docker container rocm/vllm-dev:main...")
         self.container = client.containers.run('rocm/vllm-dev:main', **docker_run_options)
-        print(f"Created Docker Container ID: {self.container.id}")
+        print(f"Launched Docker Container ID: {self.container.id}")
 
     def build(self):
         path = "hipBLASLt"
@@ -113,4 +88,6 @@ class GEMMHipBLAS:
                     table1.add_row([m,n,k,tflops])
 
         print(table1)
+        tools.export_markdown("GEMM HipBLASLt", "The results shown below are with random initialization (best representation of real-life workloads) " + self.datatype +  ", and " + str(self.w) + " warmup iterations.", table1)
+        results = self.container.exec_run(f'/bin/sh -c "rm {self.dir_path}/Outputs/GEMMHipBLAS_results.txt"', stderr=True)
         self.container.kill()
