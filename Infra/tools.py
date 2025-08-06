@@ -27,7 +27,7 @@ def check_error(results):
 def get_os_version():
     results = subprocess.run("lsb_release -a | grep Release", shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     ubuntu = results.stdout.decode('utf-8').strip().split("\t")[1]
-    return ubuntu
+    return "Ubuntu"+ubuntu
 
 def get_hostname():
     results = subprocess.run(["hostname"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -55,6 +55,7 @@ def export_markdown(title, description, table = None):
         
 def create_bm_entry(bmName, appName, sku, result):
     id = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+    date = datetime.datetime.now().strftime("%Y-%m-%d")
     ubuntu = get_os_version()
     return {
         "jobId": id,
