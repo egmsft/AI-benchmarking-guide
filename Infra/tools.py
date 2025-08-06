@@ -3,7 +3,6 @@ import datetime
 import subprocess
 pwd = os.getcwd() + "/Outputs/log.txt"
 curr = os.getcwd()
-ubuntu = get_os_version()
 
 def create_dir(name: str):
     current = os.getcwd()
@@ -56,6 +55,7 @@ def export_markdown(title, description, table = None):
         
 def create_bm_entry(bmName, appName, sku, result):
     id = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+    ubuntu = get_os_version()
     return {
         "jobId": id,
         "appName": appName,
