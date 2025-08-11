@@ -8,7 +8,8 @@ from nemo import lightning as nl
 from nemo.collections import llm
 from nemo.collections.llm.recipes.precision.mixed_precision import (
     fp16_mixed,
-    fp16_with_fp8_mixed
+    fp16_with_fp8_mixed,
+    bf16_with_fp8_mixed
 )
 
 
@@ -27,7 +28,7 @@ def load_config():
 
 def configure_recipe(cfg, nodes=1, gpus_per_node=4):
     precision = cfg.get("precision", "fp16").lower()
-    plugin = fp16_with_fp8_mixed() if precision == "fp8" else fp16_mixed()
+    plugin = bf16_with_fp8_mixed() if precision == "fp8" else fp16_mixed()
 
     model_size = args.model_size
     if model_size == "3b":
