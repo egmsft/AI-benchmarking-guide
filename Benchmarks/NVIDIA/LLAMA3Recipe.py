@@ -4,6 +4,7 @@ import argparse
 import time
 import numpy as np
 import nemo_run as run
+import torch 
 from nemo import lightning as nl
 from nemo.collections import llm
 from nemo.collections.llm.recipes.precision.mixed_precision import (
@@ -59,6 +60,10 @@ def configure_recipe(cfg, nodes=1, gpus_per_node=4):
     recipe.trainer.strategy.context_parallel_size = cp
 
     recipe.data.micro_batch_size = cfg["micro_batch_size"]
+
+    if pp > 1:
+        plugin.pipeline_dtype = torch.bfloat16
+        recipe.model.config.pipeline_dtype = torch.bfloat16
 
     recipe.trainer.plugins = plugin
     recipe.trainer.accelerator = "gpu"
