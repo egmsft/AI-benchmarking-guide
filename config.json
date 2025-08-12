@@ -75,7 +75,7 @@
         "precision": "fp8",
         "parallelism": {
             "tp": 1,
-            "pp": 1,
+            "pp": 2,
             "vp": null,
             "cp": 1
         }

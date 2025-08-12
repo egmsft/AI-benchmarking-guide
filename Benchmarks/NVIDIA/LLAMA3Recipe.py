@@ -4,11 +4,13 @@ import argparse
 import time
 import numpy as np
 import nemo_run as run
+import torch 
 from nemo import lightning as nl
 from nemo.collections import llm
 from nemo.collections.llm.recipes.precision.mixed_precision import (
     fp16_mixed,
-    fp16_with_fp8_mixed
+    fp16_with_fp8_mixed,
+    bf16_with_fp8_mixed
 )
 
 
@@ -27,7 +29,7 @@ def load_config():
 
 def configure_recipe(cfg, nodes=1, gpus_per_node=4):
     precision = cfg.get("precision", "fp16").lower()
-    plugin = fp16_with_fp8_mixed() if precision == "fp8" else fp16_mixed()
+    plugin = bf16_with_fp8_mixed() if precision == "fp8" else fp16_mixed()
 
     model_size = args.model_size
     if model_size == "3b":
@@ -58,6 +60,10 @@ def configure_recipe(cfg, nodes=1, gpus_per_node=4):
     recipe.trainer.strategy.context_parallel_size = cp
 
     recipe.data.micro_batch_size = cfg["micro_batch_size"]
+
+    if pp > 1:
+        plugin.pipeline_dtype = torch.bfloat16
+        recipe.model.config.pipeline_dtype = torch.bfloat16
 
     recipe.trainer.plugins = plugin
     recipe.trainer.accelerator = "gpu"
