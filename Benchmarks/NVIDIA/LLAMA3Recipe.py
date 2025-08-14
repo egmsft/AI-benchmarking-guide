@@ -30,6 +30,7 @@ def load_config():
 def configure_recipe(cfg, nodes=1, gpus_per_node=4):
     precision = cfg.get("precision", "bf16").lower()
     plugin = bf16_with_fp8_mixed() if precision == "bf16" else fp16_with_fp8_mixed()
+    gpus_per_node = 8 if args.machine_name == "H200" else 4 # updates gpus per node if H200
 
     model_size = args.model_size
     if model_size == "3b":
@@ -88,6 +89,7 @@ def local_executor_torchrun(nodes=1, devices=4):
         "NVTE_ASYNC_AMAX_REDUCTION": "1",
         "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
     }
+    devices = 8 if args.machine_name == "H200" else 4 
     return run.LocalExecutor(
         ntasks_per_node=devices,
         launcher="torchrun",

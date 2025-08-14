@@ -108,8 +108,14 @@ class LLAMA3Pretraining:
         log_path = f"Outputs/log.txt" # log to log file
         tools.write_log(f"Pulling and launching NeMo container for {self.machine_name}.") # write to log file
         print(f"Pulling and launching NeMo docker container for {self.machine_name} and logging at 'Outputs/log.txt'.") # also let the user know where log is
-        tools.write_log("Pretraining will finish in 4 hours.")
-        print("Pretraining will finish in 4 hours.")
+
+        if self.model_size == "3b":
+            time = 2
+        else:
+            time = 4
+
+        tools.write_log(f"Pretraining will finish in {time} hours.")
+        print(f"Pretraining will finish in {time} hours.")
 
         command = [
             "docker", "run", "--rm", "-i",
