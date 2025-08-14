@@ -93,8 +93,12 @@ def run_LLMBenchmark():
     test.run_benchmark()
 
 def run_LLAMA3Pretrain(model_size="8b"):
-    test = llama3pre.LLAMA3Pretraining("config.json", sku_name, model_size)
-    test.run()
+    if "GB200" or "H200" in sku_name:
+        test = llama3pre.LLAMA3Pretraining("config.json", sku_name, model_size)
+    else:
+        print(f"LLAMA3 Pretraining not supported on {sku_name} yet")
+        return
+    test.run() 
 
 sku_name = get_system_specs()
 arguments = []

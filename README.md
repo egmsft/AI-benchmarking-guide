@@ -42,7 +42,7 @@ The [Multichase](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchm
 To assess how different system components (as tested by the microbenchmarks) affect overall performance, we suggetsing running some [end-to-end workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLMBenchmark.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (8B, 70B, and 405B). The performance of the model inferencing (throughput) is measured in tokens per second, accounting for both processing input tokens and generating output tokens. The workloads run in a TensorRT-LLM environment. Users need huggingface credentials to download all the model weigths.
 
 ### 9. End-to-end Pretraining Workloads
-To assess the overall performance of GB200, we suggest running some [end-to-end pretrain workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLAMA3Run.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (3B, 8B). The performance of the model is measured in pretraining time per step. The workloads run in a Docker environment. Users need NeMo credentials to pull the container.
+To assess the overall performance of GB200 and H200, we suggest running some [end-to-end pretrain workloads](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/LLAMA3Run.py). The models we used for benchmarking are the current industry standards across various sizes: LLAMA 3 (3B, 8B). The performance of the model is measured in pretraining time per step. The workloads run in a Docker environment. Users need NeMo credentials to pull the container.
 
 ## Tests Included - AMD
 

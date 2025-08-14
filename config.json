@@ -71,13 +71,51 @@
         "mount_path": ".",
         "training_script": "Benchmarks/NVIDIA/LLAMA3Recipe.py",
         "docker_image": "nvcr.io/nvidia/nemo:25.04",
-        "micro_batch_size": 4,
-        "precision": "fp8",
-        "parallelism": {
-            "tp": 1,
-            "pp": 2,
-            "vp": null,
-            "cp": 1
+        "model": {
+            "H200": {
+                "3b": {
+                    "micro_batch_size": 4,
+                    "precision": "bf16",
+                    "parallelism": {
+                        "tp": 1,
+                        "pp": 2,
+                        "vp": null,
+                        "cp": 1
+                    }
+                },
+                "8b": {
+                    "micro_batch_size": 4,
+                    "precision": "bf16",
+                    "parallelism": {
+                        "tp": 1,
+                        "pp": 2,
+                        "vp": null,
+                        "cp": 1
+                    }
+                }
+            },
+            "GB200": {
+                "3b": {
+                    "micro_batch_size": 4,
+                    "precision": "fp16",
+                    "parallelism": {
+                        "tp": 1,
+                        "pp": 1,
+                        "vp": null,
+                        "cp": 1
+                    }
+                },
+                "8b": {
+                    "micro_batch_size": 4,
+                    "precision": "bf16",
+                    "parallelism": {
+                        "tp": 1,
+                        "pp": 2,
+                        "vp": null,
+                        "cp": 1
+                    }
+                }
+            }
         }
     }
 }

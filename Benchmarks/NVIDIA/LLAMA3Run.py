@@ -119,7 +119,7 @@ class LLAMA3Pretraining:
             "--ulimit", "stack=67108864",
             "-v", f"{self.mount_path}:/workspace/nemo-run",
             self.container,
-            "bash", "-c", f"cd /workspace/nemo-run && python {self.training_script} --model_size {self.model_size}"
+            "bash", "-c", f"cd /workspace/nemo-run && python {self.training_script} --model_size {self.model_size} --machine_name {self.machine_name}"
         ]
 
         # launch command and write to log file (this shows all info about epoch, training time, etc.)
