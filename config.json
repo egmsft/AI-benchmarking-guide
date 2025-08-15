@@ -88,9 +88,9 @@
                     "precision": "bf16",
                     "parallelism": {
                         "tp": 1,
-                        "pp": 2,
+                        "pp": 1,
                         "vp": null,
-                        "cp": 1
+                        "cp": 2
                     }
                 }
             },
