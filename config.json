@@ -75,7 +75,7 @@
             "H200": {
                 "3b": {
                     "micro_batch_size": 4,
-                    "precision": "bf16",
+                    "precision": "fp16",
                     "parallelism": {
                         "tp": 1,
                         "pp": 1,
