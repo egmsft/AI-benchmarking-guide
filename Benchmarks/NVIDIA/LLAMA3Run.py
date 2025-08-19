@@ -118,7 +118,7 @@ class LLAMA3Pretraining:
         print(f"Pretraining will finish in {time} hours.")
 
         command = [
-            "docker", "run", "--rm", "-i",
+            "sudo", "docker", "run", "--rm", "-i",
             "--gpus", "all",
             "--ipc=host",
             "--ulimit", "memlock=-1",

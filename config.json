@@ -74,7 +74,7 @@
         "model": {
             "H200": {
                 "3b": {
-                    "micro_batch_size": 4,
+                    "micro_batch_size": 8,
                     "precision": "fp16",
                     "parallelism": {
                         "tp": 1,
@@ -84,13 +84,13 @@
                     }
                 },
                 "8b": {
-                    "micro_batch_size": 4,
+                    "micro_batch_size": 2,
                     "precision": "bf16",
                     "parallelism": {
                         "tp": 1,
                         "pp": 1,
                         "vp": null,
-                        "cp": 2
+                        "cp": 1
                     }
                 }
             },
