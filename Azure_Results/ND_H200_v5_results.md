@@ -10,7 +10,7 @@
 | NVIDIA Driver | 570.133.20  |
 | VBIOS         | 96.00.BC.00.02 |
 | NCCL          |    2.26.2  |
-| PyTorch       |    2.7.1+cu126   |
+| PyTorch       |    2.7.0   |
 
 
 ## Microbenchmarks
@@ -112,37 +112,37 @@ The values (in GB/s), in the table 6 and figure 5 below, are the bus bandwidth v
 
 Performance results for LLAMA 3.1 (8B) with FP8 quantization, 1000 requests.
 
-| tp size | input len | output len | throughput(tokens/sec) |
-|---------|-----------|------------|------------------------|
-| 1       | 128       | 128        | 17853                  |
-| 1       | 128       | 1024       | 23880                  |
-| 1       | 128       | 2048       | 21255                  |
-| 1       | 500       | 2000       | 18357                  |
-| 1       | 1024      | 1024       | 15043                  |
-| 1       | 2048      | 2048       | 9736                   |
+| input len | output len | tp size | throughput(tokens/s) |
+| --- | --- | --- | --- |
+| 128 | 128 | 1 | 51802 |
+| 128 | 2048 | 1 | 26647 |
+| 500 | 2000 | 1 | 25981 |
+| 2048 | 2048 | 1 | 22876 |
+| 1024 | 1024 | 1 | 33514 |
+| 128 | 1024 | 1 | 34068 |
 
 ### LLAMA 3 (70B)
 
 Performance results for LLAMA 3 (70B) with FP8 quantization, 1000 requests.
 
-| tp size | input len | output len | throughput(tokens/sec) |
-|---------|-----------|------------|------------------------|
-| 8       | 128       | 128        | 11973                  |
-| 8       | 128       | 1024       | 18369                  |
-| 8       | 128       | 2048       | 18219                  |
-| 8       | 500       | 2000       | 15911                  |
-| 8       | 1024      | 1024       | 11302                  |
-| 8       | 2048      | 2048       | 10371                  |
+| input len | output len | tp size | throughput(tokens/s) |
+| --- | --- | --- | --- |
+| 128 | 128 | 8 | 25453 |
+| 128 | 2048 | 8 | 20115 |
+| 500 | 2000 | 8 | 20522 |
+| 2048 | 2048 | 8 | 21466 |
+| 1024 | 1024 | 8 | 23501 |
+| 128 | 1024 | 8 | 21515 |
 
 ### LLAMA 3 (405B)
 
 Performance results for LLAMA 3 (405B) with FP8 quantization, 1000 requests.
 
-| tp size | input len | output len | throughput(tokens/sec) |
-|---------|-----------|------------|------------------------|
-| 8       | 128       | 128        | 3148                   |
-| 8       | 128       | 1024       | 4981                   |
-| 8       | 128       | 2048       | 5098                   |
-| 8       | 500       | 2000       | 4447                   |
-| 8       | 1024      | 1024       | 3050                   |
-| 8       | 2048      | 2048       | 2859                   |
+| input len | output len | tp size | throughput(tokens/s) |
+| --- | --- | --- | --- |
+| 128 | 128 | 8 | 6607 |
+| 128 | 2048 | 8 | 5510 |
+| 500 | 2000 | 8 | 5693 |
+| 2048 | 2048 | 8 | 6046 |
+| 1024 | 1024 | 8 | 6273 |
+| 128 | 1024 | 8 | 5714 |
