@@ -50,7 +50,7 @@ class NVBandwidth:
             if 'memcpy' in line:
                 continue
             row = [x.strip() for x in line.split() if x.strip()]
-            current.append([int(float(x)) if x.replace('.', '', 1).isdigit() else x for x in row])
+            current.append([int(float(x)) if x.replace('.', '', 1).isdigit() else "-" for x in row])
         if current:
             tables.append(current)
         result = [tables[0], tables[1], tables[4]]
