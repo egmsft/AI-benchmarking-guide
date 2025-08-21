@@ -108,18 +108,24 @@ class LLAMA3Pretraining:
         log_path = f"Outputs/log.txt" # log to log file
         tools.write_log(f"Pulling and launching NeMo container for {self.machine_name}.") # write to log file
         print(f"Pulling and launching NeMo docker container for {self.machine_name} and logging at 'Outputs/log.txt'.") # also let the user know where log is
-        tools.write_log("Pretraining will finish in 4 hours.")
-        print("Pretraining will finish in 4 hours.")
+
+        if self.model_size == "3b":
+            time = 2
+        else:
+            time = 4
+
+        tools.write_log(f"Pretraining will finish in {time} hours.")
+        print(f"Pretraining will finish in {time} hours.")
 
         command = [
-            "docker", "run", "--rm", "-i",
+            "sudo", "docker", "run", "--rm", "-i",
             "--gpus", "all",
             "--ipc=host",
             "--ulimit", "memlock=-1",
             "--ulimit", "stack=67108864",
             "-v", f"{self.mount_path}:/workspace/nemo-run",
             self.container,
-            "bash", "-c", f"cd /workspace/nemo-run && python {self.training_script} --model_size {self.model_size}"
+            "bash", "-c", f"cd /workspace/nemo-run && python {self.training_script} --model_size {self.model_size} --machine_name {self.machine_name.split()[-1]}"
         ]
 
         # launch command and write to log file (this shows all info about epoch, training time, etc.)
