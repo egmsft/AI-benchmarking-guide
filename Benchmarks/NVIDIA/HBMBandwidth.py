@@ -10,13 +10,11 @@ class HBMBandwidth:
     def __init__(self, path: str, machine: str):
         self.name = "HBMBandwidth"
         self.machine_name = machine
-        config = self.get_config(path)
         self.num_runs, self.interval = 5, 10
         self.buffer = []
 
     def build(self):
         current = os.getcwd()
-
         path = "BabelStream"
         isdir = os.path.isdir(path)
         if not isdir:
