@@ -91,3 +91,33 @@ The values (in GB/s) are the bus bandwidth values obtained from the NCCL AllRedu
 | 4G          | 673.06          |
 | 8G          | 679.61          |
 
+
+## End-to-End Inference Workloads - TensorRT-LLM
+
+### LLAMA 3.1 (8B)
+
+Performance results for LLAMA 3.1 (8B) with FP8 quantization, 1000 requests.
+
+| tp size | input len | output len | throughput(tokens/sec) |
+|---------|-----------|------------|------------------------|
+| 1       | 128       | 128        | 41058                  |
+| 1       | 128       | 1024       | 46703                  |
+| 1       | 128       | 2048       | 39809                  |
+| 1       | 500       | 2000       | 33836                  |
+| 1       | 1024      | 1024       | 27944                  |
+| 1       | 2048      | 2048       | 20341                  |
+
+### LLAMA 3 (70B)
+
+Performance results for LLAMA 3 (70B) with FP8 quantization, 1000 requests.
+
+| tp size | input len | output len | throughput(tokens/sec) |
+|---------|-----------|------------|------------------------|
+| 4       | 128       | 128        |  13715                 |
+| 4       | 128       | 1024       |  21626                 |
+| 4       | 128       | 2048       |  21374                 |
+| 4       | 500       | 2000       |  18279                 |
+| 4       | 1024      | 1024       |  12376                 |
+| 4       | 2048      | 2048       |  10642                 |
+
+
