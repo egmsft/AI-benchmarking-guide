@@ -103,7 +103,7 @@ class LLMBenchmark:
         for model_name in self.config['models']:
             if self.config['models'][model_name]['use_model'] and self.config['models'][model_name]['type'] == "nvidia":
                 print("Benchmarking ", model_name, " with tp size ", self.config['models'][model_name]['tp_size'])
-                self.table = PrettyTable(["input len", "output len", "tp size", "throughput(tokens/s)"])
+                self.table = PrettyTable(["tp size", "input len", "output len", "throughput(tokens/s)"])
                 for i in range(len(self.config['models'][model_name]['input_sizes'])):
                     isl = self.config['models'][model_name]['input_sizes'][i]
                     osl = self.config['models'][model_name]['output_sizes'][i]
