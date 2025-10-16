@@ -1,4 +1,4 @@
-# Azure ND GB200 v6 Benchmark Results
+# Azure ND GB300 v6 Benchmark Results
 
 ## System Specifications
 
@@ -35,14 +35,14 @@ The results shown below are with random initialization (best representation of r
 
 The performance (in TFLOPS), in table below, represents the performance for a head dimension of 128, a batch size of 2, and a sequence length of 8192.
 
-|       | ND GB200 v6 (TFLOPS) |
+|       | ND GB300 v6 (TFLOPS) |
 | ----- | ----------------- |
 | Standard Attention(PyTorch)  | 249.5   |
 | Flash Attention 2.0   | 399.7  |
 
 ### NV Bandwidth
 
-|                       | ND GB200 v6 (GB/s) |
+|                       | ND GB300 v6 (GB/s) |
 | --------------------- | ----------------- |
 | Host to Device        | 211                |
 | Device to Host        | 193                |
@@ -52,9 +52,6 @@ The performance (in TFLOPS), in table below, represents the performance for a he
 ### NCCL Bandwidth
 
 The values (in GB/s) are the bus bandwidth values obtained from the NCCL AllReduce (Ring algorithm) tests in-place operations, varying from 1KB to 8GB of data.
-
-| Message Size (Bytes) | ND GB200 v6 (GB/s) |
-| -------------------- | ----------------- |
 
 | Message Size (Bytes) | ND GB300 v6 (GB/s) |
 |--------------|-----------------|
