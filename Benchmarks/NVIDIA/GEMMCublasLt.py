@@ -51,6 +51,12 @@ class GEMMCublastLt:
                 stderr=subprocess.PIPE,
             )
             tools.write_log(tools.check_error(results))
+            
+        if self.datatype == "fp4e2m1":
+            results = subprocess.run("cd superbench && git checkout fp4", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        else:
+            results = subprocess.run("cd superbench && git checkout main", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
         current = os.getcwd()
         build_path = os.path.join(
             current,
@@ -80,17 +86,17 @@ class GEMMCublastLt:
         print("Running CublasLt with datatype " + self.datatype + "...")
         current = os.getcwd()
         if self.datatype == "fp8e4m3":
-            m_dims = [1024, 2048, 4096, 8192, 16384, 32768, 1024, 6144, 802816, 802816]
-            n_dims = [1024, 2048, 4096, 8192, 16384, 32768, 2145, 12288, 192, 192]
-            k_dims = [1024, 2048, 4096, 8192, 16384, 32768, 1024, 12288, 192, 768]
+            m_dims = [1024, 2048, 4096, 8192, 16384, 32768, 1024, 6144, 802816]
+            n_dims = [1024, 2048, 4096, 8192, 16384, 32768, 2145, 12288, 192]
+            k_dims = [1024, 2048, 4096, 8192, 16384, 32768, 1024, 12288, 768]
         elif self.datatype == "fp4e2m1":
-            m_dims = [1024, 2048, 4096, 8192, 16384, 32768, 1024, 802816, 802816]
-            n_dims = [1024, 2048, 4096, 8192, 16384, 32768, 2145, 192, 192]
-            k_dims = [1024, 2048, 4096, 8192, 16384, 32768, 1024, 192, 768]
+            m_dims = [1024, 2048, 4096, 8192, 16384, 32768, 1024, 802816]
+            n_dims = [1024, 2048, 4096, 8192, 16384, 32768, 2145, 192]
+            k_dims = [1024, 2048, 4096, 8192, 16384, 32768, 1024, 768]
         else:
-            m_dims = [1024, 2048, 4096, 8192, 16384, 1024, 6144, 802816, 802816]
-            n_dims = [1024, 2048, 4096, 8192, 16384, 2145, 12288, 192, 192]
-            k_dims = [1024, 2048, 4096, 8192, 16384, 1024, 12288, 192, 768]
+            m_dims = [1024, 2048, 4096, 8192, 16384, 1024, 6144, 802816]
+            n_dims = [1024, 2048, 4096, 8192, 16384, 2145, 12288, 192]
+            k_dims = [1024, 2048, 4096, 8192, 16384, 1024, 12288, 768]
         os.chdir(self.bindir)
         buffer = []
         for i in range(len(m_dims)):
