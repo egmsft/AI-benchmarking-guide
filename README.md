@@ -5,8 +5,9 @@ Inefficient workload optimization can significantly increase operational costs f
 ### NVIDIA SKUs
 - ND A100 v4
 - ND H100 v5
-- ND H200 v5.
+- ND H200 v5
 - ND GB200 v6
+- ND GB300 v6
 
 ### AMD SKUs
 - ND MI300X v5
