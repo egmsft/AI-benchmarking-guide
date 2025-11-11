@@ -24,6 +24,9 @@ The guide supports 3 datatypes: `fp8e4m3`, `fp4e2m1` and `fp16`. Change these in
 The [NCCL bandwidth test](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/NCCLBandwidth.py) is a benchmark provided by NVIDIA's NCCL (NVIDIA Collective Communications Library) library. NCCL is a high-performance library, designed to accelerate interGPU communication, that optimizes communication between multiple GPUs within a single node or across multiple nodes in a multi-GPU system.
 The performance measured is the data transfer bandwidth between GPUs using various communication patterns, such as point-to-point (pairwise) communication or collective communication (communication between multiple GPUs).
 
+#### Extra:
+[Wiki for Debugging Multi-Node NCCL Performance](https://dev.azure.com/msazure/AzureWiki/_wiki/wikis/AzureWiki.wiki/781566/Debugging-NCCL-Performance-Issues?anchor=recommended-command-lines-for-ndv6-infiniband-skus-(assuming-hpcx-or-openmpi-for-mpi)%3A) - Azure Internal Only 
+
 ### 3. Microbenchmark - HBM Bandwidth
 [High Bandwidth Memory](https://github.com/Azure/AI-benchmarking-guide/blob/main/Benchmarks/NVIDIA/HBMBandwidth.py) (HBM) is designed to provide a significant boost in memory bandwidth for GPUs by handling vast amounts of data through vertical stacking of multiple layers of memory chips, connected by through-silicon vias.
 
