@@ -146,3 +146,12 @@ Performance results for LLAMA 3 (405B) with FP8 quantization, 1000 requests.
 | 8       | 500       | 2000       | 4530                   |
 | 8       | 1024      | 1024       | 3121                   |
 | 8       | 2048      | 2048       | 3014                   |
+
+## End-to-End Pretraining Workloads - Single Node
+### LLAMA 3 (3B)
+<img width="600" height="600" alt="LLAMA3_3b_Pretrain_Results-H200" src="https://github.com/user-attachments/assets/9f900f60-65b7-439d-b58e-86434ab274b2" />
+
+
+### LLAMA 3 (8B)
+<img width="600" height="600" alt="LLAMA3_8b_Pretrain_Results-H200" src="https://github.com/user-attachments/assets/229bbf32-7cba-42f0-90f2-05039226d52d" />
+
