@@ -13,7 +13,7 @@
 
 
 ## Microbenchmarks
-### GEMM CuBLASLt 
+### GEMM CuBLASLt (FP8)
 
 The results shown below are with random initialization (best representation of real-life workloads), FP8, and 10,000 warmup iterations.
 
@@ -29,6 +29,23 @@ The results shown below are with random initialization (best representation of r
 |   1024    |   2145    |   1024    | 1115.1    |
 |   6144    |  12288    |  12288    | 3279.5    |
 | 802816    |   192     |   768     | 1717.1    |
+
+
+### GEMM CuBLASLt (FP4)
+
+The results shown below are with random initialization (best representation of real-life workloads), FP4, and 10,000 warmup iterations.
+
+|     m     |     n     |     k     | ND GB300 v6 (TFLOPS)      |
+|-----------|-----------|-----------|------------|
+|   1024    |   1024    |   1024    |  316.4    |
+|   2048    |   2048    |   2048    |  1678.0  |
+|   4096    |   4096    |   4096    |  5417.0   |
+|   8192    |   8192    |   8192    |  8155.9   |
+|  16384    |  16384    |  16384    |  8640.3   |
+|  32768    |  32768    |  32768    |  8555.1   |
+| \---------- | \-------- | \------- | \--------------------- |
+|   1024    |   2145    |   1024    |  549.0   |
+| 802816    |   192     |   768     |   2220.7  |
 
 
 ### Flash Attention 2.0
