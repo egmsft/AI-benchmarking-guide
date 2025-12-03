@@ -53,9 +53,9 @@ class GEMMCublastLt:
             tools.write_log(tools.check_error(results))
             
         if self.datatype == "fp4e2m1":
-            results = subprocess.run("cd superbench && git checkout fp4", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            results = subprocess.run("cd superbenchmark && git checkout fp4", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         else:
-            results = subprocess.run("cd superbench && git checkout main", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            results = subprocess.run("cd superbenchmark && git checkout main", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
         current = os.getcwd()
         build_path = os.path.join(
